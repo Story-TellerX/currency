@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from currency.views import hello_world
+from currency.views import hello_world, gen_password
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('gen-pass/', gen_password),
 
     path('hello/', hello_world),
 ]

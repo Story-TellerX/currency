@@ -1,8 +1,10 @@
-from django.http import HttpResponse  # Http404
+from annoying.functions import get_object_or_None
+from django.http import HttpResponse, HttpResponseRedirect  # Http404
 from django.shortcuts import render, get_object_or_404
 
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
+from currency.forms import RateForm, BankForm, ContactusForm
 
 
 def gen_password(request):
@@ -90,3 +92,123 @@ def bank_details(request, pk):
     }
 
     return render(request, 'bank_details.html', context=context)
+
+
+def rate_create(request):
+    # form_data = request.GET
+    # if form_data:
+    #     form = RateForm(form_data)
+    #     if form.is_valid():
+    #         form.save()
+    #         return HttpResponseRedirect('/currency/rate/list/')
+    # else:
+    #     form = RateForm()
+
+    if request.method == 'POST':
+        form_data = request.POST
+        form = RateForm(form_data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/rate/list/')
+    elif request.method == 'GET':
+        form = RateForm()
+
+    counter = Rate.objects.count()
+
+    context = {
+        # 'message': 'Rate create message',
+        'form': form,
+        'count': counter,
+    }
+    return render(request, "rate_create.html", context=context)
+
+
+def rate_update(request, pk):
+    instance = get_object_or_404(Rate, pk=pk)
+
+    if request.method == 'POST':
+        form_data = request.POST
+        form = RateForm(form_data, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/rate/list/')
+    elif request.method == 'GET':
+        form = RateForm(instance=instance)
+
+    context = {
+        'form': form,
+        'instance': instance,
+    }
+
+    return render(request, "rate_update.html", context=context)
+
+
+def rate_delete(request, pk):
+    instance = get_object_or_None(Rate, pk=pk)
+    # instance.delete()
+    if instance is not None:
+        instance.delete()
+    return HttpResponseRedirect('/currency/rate/list/')
+
+
+def bank_create(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        form = BankForm(form_data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/bank/list/')
+    elif request.method == 'GET':
+        form = BankForm()
+
+    counter = Bank.objects.count()
+
+    context = {
+        'form': form,
+        'count': counter,
+    }
+    return render(request, "bank_create.html", context=context)
+
+
+def bank_update(request, pk):
+    instance = get_object_or_404(Bank, pk=pk)
+    if request.method == 'POST':
+        form_data = request.POST
+        form = BankForm(form_data, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/bank/list/')
+    elif request.method == 'GET':
+        form = BankForm(instance=instance)
+
+    context = {
+        'form': form,
+        'instance': instance,
+    }
+    return render(request, "bank_update.html", context=context)
+
+
+def bank_delete(request, pk):
+    instance = get_object_or_None(Bank, pk=pk)
+    if instance is not None:
+        instance.delete()
+    return HttpResponseRedirect('/currency/bank/list/')
+
+
+def contactus_create(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        form = ContactusForm(form_data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/contactus/list/')
+    elif request.method == 'GET':
+        form = ContactusForm()
+
+    counter = ContactUs.objects.count()
+
+    context = {
+        'form': form,
+        'count': counter,
+    }
+    return render(request, "contactus_create.html", context=context)

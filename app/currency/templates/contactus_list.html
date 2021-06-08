@@ -23,10 +23,14 @@ tr:nth-child(even) {
 </head>
 <body>
 
+<h2>
+  <a href="/currency/contactus/create/">Create ContactUS</a>
+</h2>
+
 <table>
   <tr>
     <th>ID</th>
-      <th>email_from</th>
+    <th>email_from</th>
     <th>subject</th>
     <th>message</th>
 
@@ -34,7 +38,7 @@ tr:nth-child(even) {
     {% for contactus in objects %}
   <tr>
     <td>{{ contactus.id }}</td>
-      <td>{{ contactus.email_from }}</td>
+    <td>{{ contactus.email_from }}</td>
     <td>{{ contactus.subject }}</td>
     <td>{{ contactus.message }}</td>
   </tr>

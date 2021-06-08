@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank update</title>
+    <style>
+button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #4CAF50;
+}
+</style>
+
+</head>
+<body>
+
+<h2>
+instance: {{ form.instance.id }}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Update Bank</button>
+</form>
+<p>
+    <a href="/currency/bank/delete/{{ form.instance.id }}/">Delete</a>
+</p>
+</h2>
+
+</body>
+</html>

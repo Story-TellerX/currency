@@ -4,7 +4,7 @@ from faker import Faker
 
 
 class Command(BaseCommand):
-    helps = 'Generate random records for contact us table'
+    help = 'Generate random records for contact us table'  # noqa
 
     def handle(self, *args, **options):
         faker = Faker()

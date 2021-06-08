@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rate List</title>
+       <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<!--{{ objects }}-->
+
+<table>
+  <tr>
+    <th>ID</th>
+      <th>CURRENCY</th>
+    <th>BUY</th>
+    <th>SALE</th>
+      <th>DATE AND TIME OF CREATION</th>
+      <th>SOURCE</th>
+  </tr>
+    {% for rate in objects %}
+  <tr>
+    <td>{{ rate.id }}</td>
+      <td>{{ rate.type_curr }}</td>
+    <td>{{ rate.buy }}</td>
+    <td>{{ rate.sale }}</td>
+      <td>{{ rate.created }}</td>
+      <td>{{ rate.source }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+
+</body>
+</html>

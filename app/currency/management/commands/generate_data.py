@@ -4,7 +4,7 @@ import random
 
 
 class Command(BaseCommand):
-    helps = 'Generate random records for Rate table'
+    help = 'Generate random records for Rate table'  # noqa
 
     def handle(self, *args, **options):
         for index in range(100):

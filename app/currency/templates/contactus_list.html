@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us List</title>
+          <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+    <th>ID</th>
+      <th>email_from</th>
+    <th>subject</th>
+    <th>message</th>
+
+  </tr>
+    {% for contactus in objects %}
+  <tr>
+    <td>{{ contactus.id }}</td>
+      <td>{{ contactus.email_from }}</td>
+    <td>{{ contactus.subject }}</td>
+    <td>{{ contactus.message }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

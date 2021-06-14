@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Banks List</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block style_for_table %}
+<style>
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -19,33 +17,35 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-</style>
-</head>
-<body>
 
+
+
+</style>
+{% endblock style_for_table %}
+
+{% block main_content %}
 <h2>
-  <a href="/currency/bank/create/">Create Bank</a>
+    <a href="/currency/bank/create/">Create Bank</a>
 </h2>
 
 <table>
-  <tr>
-    <th>ID</th>
-    <th>NAME</th>
-    <th>URL</th>
-    <th>CREATED</th>
-    <th>PHONE NUMBER</th>
-    <th>EDIT</th>
-  </tr>
-{% for bank in objects %}
-  <tr>
-    <td>{{ bank.id }}</td>
-    <td>{{ bank.name }}</td>
-    <td>{{ bank.url }}</td>
-    <td>{{ bank.created }}</td>
-    <td>{{ bank.number }}</td>
-    <td><a href="/currency/bank/update/{{ bank.id }}/">Edit</a></td>
-  </tr>
-{% endfor %}
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>URL</th>
+        <th>CREATED</th>
+        <th>PHONE NUMBER</th>
+        <th>EDIT</th>
+    </tr>
+    {% for bank in objects %}
+    <tr>
+        <td>{{ bank.id }}</td>
+        <td>{{ bank.name }}</td>
+        <td>{{ bank.url }}</td>
+        <td>{{ bank.created }}</td>
+        <td>{{ bank.number }}</td>
+        <td><a href="/currency/bank/update/{{ bank.id }}/">Edit</a></td>
+    </tr>
+    {% endfor %}
 
-</body>
-</html>
+    {% endblock main_content %}

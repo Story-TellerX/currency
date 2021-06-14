@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bank Create</title>
-    <style>
+{% extends 'base.html' %}
+{% block style_for_table %}
+
+<style>
 button {
   border: none;
   color: white;
@@ -16,19 +14,21 @@ button {
   cursor: pointer;
   background-color: #008CBA;
 }
+
+
 </style>
-</head>
-<body>
+{% endblock style_for_table %}
+
+{% block main_content %}
 
 COUNT: {{ count }}
 
 <form method="post">
-  {% csrf_token %}
+    {% csrf_token %}
     <h2>
-          {{ form.as_p }}
+        {{ form.as_p }}
     </h2>
-  <button type="submit">Create Bank</button>
+    <button type="submit">Create Bank</button>
 </form>
 
-</body>
-</html>
+{% endblock main_content %}

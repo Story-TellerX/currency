@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rate update</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block style_for_table %}
+
+<style>
 button {
   border: none;
   color: white;
@@ -16,21 +15,24 @@ button {
   cursor: pointer;
   background-color: #4CAF50;
 }
+
 </style>
-</head>
-<body>
-<h2>
+
+{% endblock style_for_table %}
+
+{% block main_content %}
+
+
 instance: {{ form.instance.id }}
 
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Update Rate</button>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Rate</button>
 </form>
 <p>
     <a href="/currency/rate/delete/{{ form.instance.id }}/">Delete</a>
 </p>
-</h2>
 
-</body>
-</html>
+
+{% endblock main_content %}

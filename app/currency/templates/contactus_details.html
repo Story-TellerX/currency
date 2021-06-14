@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Contact Us Details</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block style_for_table %}
+
+<style>
 
 table {
   width:100%;
@@ -24,28 +23,29 @@ th {
   background-color: black;
   color: white;
 }
-</style>
-</head>
 
-<body>
+</style>
+
+{% endblock style_for_table %}
+
+{% block main_content %}
 
 <table>
 
-  <tr>
-    <th>ID</th>
-    <th>email_from</th>
-    <th>subject</th>
-    <th>message</th>
-  </tr>
+    <tr>
+        <th>ID</th>
+        <th>email_from</th>
+        <th>subject</th>
+        <th>message</th>
+    </tr>
 
-  <tr>
-    <td>{{ object.id }}</td>
-    <td>{{ object.email_from }}</td>
-    <td>{{ object.subject }}</td>
-    <td>{{ object.message }}</td>
-  </tr>
+    <tr>
+        <td>{{ object.id }}</td>
+        <td>{{ object.email_from }}</td>
+        <td>{{ object.subject }}</td>
+        <td>{{ object.message }}</td>
+    </tr>
 
 </table>
 
-</body>
-</html>
+{% endblock main_content %}

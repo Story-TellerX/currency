@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Contact Us List</title>
-          <style>
+{% extends 'base.html' %}
+
+{% block style_for_table %}
+
+<style>
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -19,31 +18,32 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
 </style>
-</head>
-<body>
+{% endblock style_for_table %}
+
+{% block main_content %}
 
 <h2>
-  <a href="/currency/contactus/create/">Create ContactUS</a>
+    <a href="/currency/contactus/create/">Create ContactUS</a>
 </h2>
 
 <table>
-  <tr>
-    <th>ID</th>
-    <th>email_from</th>
-    <th>subject</th>
-    <th>message</th>
+    <tr>
+        <th>ID</th>
+        <th>email_from</th>
+        <th>subject</th>
+        <th>message</th>
 
-  </tr>
+    </tr>
     {% for contactus in objects %}
-  <tr>
-    <td>{{ contactus.id }}</td>
-    <td>{{ contactus.email_from }}</td>
-    <td>{{ contactus.subject }}</td>
-    <td>{{ contactus.message }}</td>
-  </tr>
-{% endfor %}
+    <tr>
+        <td>{{ contactus.id }}</td>
+        <td>{{ contactus.email_from }}</td>
+        <td>{{ contactus.subject }}</td>
+        <td>{{ contactus.message }}</td>
+    </tr>
+    {% endfor %}
 </table>
 
-</body>
-</html>
+{% endblock main_content %}

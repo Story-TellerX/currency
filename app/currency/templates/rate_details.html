@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rate Details</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block style_for_table %}
+
+<style>
 table {
   width:100%;
 }
@@ -23,27 +22,31 @@ th {
   background-color: black;
   color: white;
 }
+
+
 </style>
-</head>
-<body>
+
+{% endblock style_for_table %}
+
+{% block main_content %}
 
 <table>
-  <tr>
-    <th>ID</th>
-    <th>CURRENCY</th>
-    <th>BUY</th>
-    <th>SALE</th>
-    <th>DATE AND TIME OF CREATION</th>
-    <th>SOURCE</th>
-  </tr>
-  <tr>
-    <td>{{ object.id }}</td>
-    <td>{{ object.type_curr }}</td>
-    <td>{{ object.buy }}</td>
-    <td>{{ object.sale }}</td>
-    <td>{{ object.created }}</td>
-    <td>{{ object.source }}</td>
-  </tr>
+    <tr>
+        <th>ID</th>
+        <th>CURRENCY</th>
+        <th>BUY</th>
+        <th>SALE</th>
+        <th>DATE AND TIME OF CREATION</th>
+        <th>SOURCE</th>
+    </tr>
+    <tr>
+        <td>{{ object.id }}</td>
+        <td>{{ object.type_curr }}</td>
+        <td>{{ object.buy }}</td>
+        <td>{{ object.sale }}</td>
+        <td>{{ object.created }}</td>
+        <td>{{ object.source }}</td>
+    </tr>
 
 </table>
 
@@ -55,5 +58,5 @@ th {
 
 {# comments #}
 
-</body>
-</html>
+
+{% endblock main_content %}

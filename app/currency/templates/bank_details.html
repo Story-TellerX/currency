@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bank Details</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block style_for_table %}
+
+<style>
 
 table {
   width:100%;
@@ -24,28 +23,30 @@ th {
   background-color: black;
   color: white;
 }
+
 </style>
-</head>
-<body>
+{% endblock style_for_table %}
+
+
+{% block main_content %}
 
 <table>
 
-  <tr>
-    <th>ID</th>
-    <th>NAME</th>
-    <th>URL</th>
-    <th>CREATED</th>
-    <th>PHONE NUMBER</th>
-  </tr>
-  <tr>
-    <td>{{ object.id }}</td>
-    <td>{{ object.name }}</td>
-    <td>{{ object.url }}</td>
-    <td>{{ object.created }}</td>
-    <td>{{ object.number }}</td>
-  </tr>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>URL</th>
+        <th>CREATED</th>
+        <th>PHONE NUMBER</th>
+    </tr>
+    <tr>
+        <td>{{ object.id }}</td>
+        <td>{{ object.name }}</td>
+        <td>{{ object.url }}</td>
+        <td>{{ object.created }}</td>
+        <td>{{ object.number }}</td>
+    </tr>
 
 </table>
 
-</body>
-</html>
+{% endblock main_content %}

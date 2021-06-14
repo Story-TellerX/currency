@@ -22,8 +22,12 @@ For install project on Ubuntu 20.04 use:
 
 5) Create db for app (from app dir):
 
-`$ python3 manage.py migrate`
+`$ python3 ./app/manage.py migrate`
 
 6) Run server:
 
-`$ python3 mange.py runserver`
+`$ python3 ./app/manage.py runserver`
+
+7) For run ipython console with sql print:
+
+`$ python3 ./app/manage.py shell_plus --print-sql`

@@ -32,7 +32,7 @@ button {
     </form>
     <p>
 <!--        <a href="/currency/bank/delete/{{ form.instance.id }}/">Delete</a>-->
-        <a href="{% url 'currency:bank-delete' instance.id %}">Delete</a>
+        <a href="{% url 'currency:bank-delete' object.id %}">Delete</a>
     </p>
 
 {% endblock main_content %}

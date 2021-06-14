@@ -24,7 +24,7 @@ button {
 {% block main_content %}
 
 
-instance: {{ form.instance.id }}
+<!--instance: {{ form.instance.id }}-->
 
 <form method="post">
     {% csrf_token %}
@@ -33,7 +33,7 @@ instance: {{ form.instance.id }}
 </form>
 <p>
     <!--    <a href="/currency/rate/delete/{{ form.instance.id }}/">Delete</a>-->
-    <a href="{% url 'currency:rate-delete' instance.id %}">Delete</a>
+    <a href="{% url 'currency:rate-delete' rate.id %}">Delete</a>
 </p>
 
 

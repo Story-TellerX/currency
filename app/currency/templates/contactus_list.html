@@ -26,7 +26,7 @@ tr:nth-child(even) {
 {% block main_content %}
 
 <h2>
-    <a href="{% url 'currency:contactus-create' %}">Create ContactUS</a>
+    <a href="{% url 'currency:contact-us-create' %}">Create ContactUS</a>
 </h2>
 
 <table>
@@ -35,15 +35,17 @@ tr:nth-child(even) {
         <th>email_from</th>
         <th>subject</th>
         <th>message</th>
+        <th>created</th>
         <th>details</th>
 
     </tr>
-    {% for contactus in objects %}
+    {% for contactus in object_list %}
     <tr>
         <td>{{ contactus.id }}</td>
         <td>{{ contactus.email_from }}</td>
         <td>{{ contactus.subject }}</td>
         <td>{{ contactus.message }}</td>
+        <td>{{ contactus.created }}</td>
         <td><a href="{% url 'currency:contactus-details' contactus.id %}">Details</a></td>
     </tr>
     {% endfor %}

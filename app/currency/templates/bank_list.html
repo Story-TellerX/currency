@@ -37,7 +37,7 @@ tr:nth-child(even) {
         <th>DETAILS</th>
         <th>EDIT</th>
     </tr>
-    {% for bank in objects %}
+    {% for bank in object_list %}
     <tr>
         <td>{{ bank.id }}</td>
         <td>{{ bank.name }}</td>
@@ -45,7 +45,7 @@ tr:nth-child(even) {
         <td>{{ bank.created }}</td>
         <td>{{ bank.number }}</td>
         <td><a href="{% url 'currency:bank-details' bank.id %}">Details</a></td>
-        <td><a href="{% url 'currency:bank-update' pk=bank.id %}">Edit</a></td>
+        <td><a href="{% url 'currency:bank-update' bank.id %}">Edit</a></td>
     </tr>
     {% endfor %}
 

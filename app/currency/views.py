@@ -1,10 +1,14 @@
 from annoying.functions import get_object_or_None
-from django.http import HttpResponse, HttpResponseRedirect  # Http404
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse  # HttpResponseRedirect, Http404
+from django.shortcuts import render, get_object_or_404, redirect  # reverse
 
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
 from currency.forms import RateForm, BankForm, ContactusForm
+
+
+def index(request):
+    return render(request, 'index.html')
 
 
 def gen_password(request):
@@ -27,7 +31,6 @@ def rate_list(request):
     context = {
         "objects": queryset,
     }
-
     return render(request, 'rate_list.html', context=context)
 
 
@@ -59,12 +62,10 @@ def contactus_list(request):
     context = {
         "objects": queryset,
     }
-
     return render(request, 'contactus_list.html', context=context)
 
 
 def contactus_details(request, pk):
-
     contactus = get_object_or_404(ContactUs, pk=pk)
 
     context = {
@@ -79,18 +80,15 @@ def bank_list(request):
     context = {
         "objects": queryset,
     }
-
     return render(request, 'bank_list.html', context=context)
 
 
 def bank_details(request, pk):
-
     banks = get_object_or_404(Bank, pk=pk)
 
     context = {
         'object': banks,
     }
-
     return render(request, 'bank_details.html', context=context)
 
 
@@ -109,7 +107,9 @@ def rate_create(request):
         form = RateForm(form_data)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/currency/rate/list/')
+            # return HttpResponseRedirect('/currency/rate/list/')
+            # return HttpResponseRedirect(reverse('currency:rate-list'))
+            return redirect('currency:rate-list')
     elif request.method == 'GET':
         form = RateForm()
 
@@ -131,7 +131,8 @@ def rate_update(request, pk):
         form = RateForm(form_data, instance=instance)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/currency/rate/list/')
+            # return HttpResponseRedirect('/currency/rate/list/')
+            return redirect('currency:rate-list')
     elif request.method == 'GET':
         form = RateForm(instance=instance)
 
@@ -148,7 +149,8 @@ def rate_delete(request, pk):
     # instance.delete()
     if instance is not None:
         instance.delete()
-    return HttpResponseRedirect('/currency/rate/list/')
+    # return HttpResponseRedirect('/currency/rate/list/')
+    return redirect('currency:rate-list')
 
 
 def bank_create(request):
@@ -157,7 +159,8 @@ def bank_create(request):
         form = BankForm(form_data)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/currency/bank/list/')
+            # return HttpResponseRedirect('/currency/bank/list/')
+            return redirect('currency:bank-list')
     elif request.method == 'GET':
         form = BankForm()
 
@@ -177,7 +180,8 @@ def bank_update(request, pk):
         form = BankForm(form_data, instance=instance)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/currency/bank/list/')
+            # return HttpResponseRedirect('/currency/bank/list/')
+            return redirect('currency:bank-list')
     elif request.method == 'GET':
         form = BankForm(instance=instance)
 
@@ -192,7 +196,8 @@ def bank_delete(request, pk):
     instance = get_object_or_None(Bank, pk=pk)
     if instance is not None:
         instance.delete()
-    return HttpResponseRedirect('/currency/bank/list/')
+    # return HttpResponseRedirect('/currency/bank/list/')
+    return redirect('currency:bank-list')
 
 
 def contactus_create(request):
@@ -201,7 +206,8 @@ def contactus_create(request):
         form = ContactusForm(form_data)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/currency/contactus/list/')
+            # return HttpResponseRedirect('/currency/contactus/list/')
+            return redirect('currency:contactus-list')
     elif request.method == 'GET':
         form = ContactusForm()
 

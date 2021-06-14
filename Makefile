@@ -19,3 +19,9 @@ gen_data_bank:
 
 lint:
 	$ flake8 app/
+
+show_urls:
+	$(manage_py) show_urls
+
+shell:
+	$(manage_py) shell_plus --print-sql

@@ -16,6 +16,7 @@ button {
   background-color: #4CAF50;
 }
 
+
 </style>
 
 {% endblock style_for_table %}
@@ -31,7 +32,8 @@ instance: {{ form.instance.id }}
     <button type="submit">Update Rate</button>
 </form>
 <p>
-    <a href="/currency/rate/delete/{{ form.instance.id }}/">Delete</a>
+    <!--    <a href="/currency/rate/delete/{{ form.instance.id }}/">Delete</a>-->
+    <a href="{% url 'currency:rate-delete' instance.id %}">Delete</a>
 </p>
 
 

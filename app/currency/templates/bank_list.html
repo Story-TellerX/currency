@@ -19,13 +19,12 @@ tr:nth-child(even) {
 }
 
 
-
 </style>
 {% endblock style_for_table %}
 
 {% block main_content %}
 <h2>
-    <a href="/currency/bank/create/">Create Bank</a>
+    <a href="{% url 'currency:bank-create' %}">Create Bank</a>
 </h2>
 
 <table>
@@ -35,6 +34,7 @@ tr:nth-child(even) {
         <th>URL</th>
         <th>CREATED</th>
         <th>PHONE NUMBER</th>
+        <th>DETAILS</th>
         <th>EDIT</th>
     </tr>
     {% for bank in objects %}
@@ -44,7 +44,8 @@ tr:nth-child(even) {
         <td>{{ bank.url }}</td>
         <td>{{ bank.created }}</td>
         <td>{{ bank.number }}</td>
-        <td><a href="/currency/bank/update/{{ bank.id }}/">Edit</a></td>
+        <td><a href="{% url 'currency:bank-details' bank.id %}">Details</a></td>
+        <td><a href="{% url 'currency:bank-update' pk=bank.id %}">Edit</a></td>
     </tr>
     {% endfor %}
 

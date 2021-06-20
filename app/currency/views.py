@@ -119,9 +119,17 @@ class CreateContactUs(CreateView):
     template_name = 'contactus_create.html'
 
     def form_valid(self, form):
+        data = form.cleaned_data
+        body = f'''
+        From: {data['email_from']}
+        Topic {data['subject']} 
+        
+        Message: 
+        {data['message']}
+        '''
         send_mail(
-            'Hello from my project',
-            'Hello! This is first attempt to add functionality to Django project.',
+            'New Contact Us form is created',
+            body,
             'testtestapp454545@gmail.com',
             ['ds_ch@i.ua'],
             fail_silently=False,

@@ -28,3 +28,6 @@ show_urls:
 
 shell:
 	$(manage_py) shell_plus --print-sql
+
+createsuperuser:
+	$(manage_py) createsuperuser

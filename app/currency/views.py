@@ -122,9 +122,9 @@ class CreateContactUs(CreateView):
         data = form.cleaned_data
         body = f'''
         From: {data['email_from']}
-        Topic {data['subject']} 
-        
-        Message: 
+        Topic {data['subject']}
+
+        Message:
         {data['message']}
         '''
         send_mail(

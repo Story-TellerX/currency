@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'annoying',
     'debug_toolbar',
+    'rangefilter',
 
     'currency',
     # Added comment to display apps

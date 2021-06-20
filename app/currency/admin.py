@@ -13,10 +13,10 @@ class RateResource(resources.ModelResource):
         model = Rate
 
 
-class BankResource(resources.ModelResource):
+class ContactUsResource(resources.ModelResource):
 
     class Meta:
-        model = Bank
+        model = ContactUs
 
 
 class RateAdmin(ImportExportModelAdmin):
@@ -50,9 +50,7 @@ class RateAdmin(ImportExportModelAdmin):
     )
 
 
-class BankAdmin(ImportExportModelAdmin):
-    resource_class = BankResource
-
+class BankAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
@@ -80,13 +78,20 @@ class BankAdmin(ImportExportModelAdmin):
     )
 
 
-class ContactUsAdmin(admin.ModelAdmin):
+class ContactUsAdmin(ImportExportModelAdmin):
+    resource_class = ContactUsResource
     list_display = (
         'id',
         'email_from',
         'subject',
         'message',
         'created',
+    )
+
+    search_fields = (
+        'email_from',
+        'subject',
+        'message',
     )
 
     def has_add_permission(self, request):
@@ -99,6 +104,6 @@ class ContactUsAdmin(admin.ModelAdmin):
         return False
 
 
-admin.site.register(Rate, RateAdmin)
 admin.site.register(Bank, BankAdmin)
 admin.site.register(ContactUs, ContactUsAdmin)
+admin.site.register(Rate, RateAdmin)

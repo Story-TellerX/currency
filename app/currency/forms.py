@@ -1,6 +1,6 @@
 from django import forms
 
-from currency.models import Rate, Bank
+from currency.models import Rate, Bank, ContactUs
 
 
 class RateForm(forms.ModelForm):
@@ -22,3 +22,16 @@ class BankForm(forms.ModelForm):
             'url',
             'number',
         )
+
+
+class ContactUsForm(forms.ModelForm):
+    class Meta:
+        model = ContactUs
+        fields = (
+            'email_from',
+            'subject',
+            'message',
+        )
+
+    # def save(self, commit=True):
+    #     return super().save(commit)

@@ -15,6 +15,9 @@ class ContactUs(models.Model):
     message = models.CharField(max_length=2500)
     created = models.DateTimeField(auto_now_add=True)
 
+    # def save(self, *args, **kwargs):
+    #     return super().save(*args, **kwargs)
+
 
 class Bank(models.Model):
     name = models.CharField(max_length=60)

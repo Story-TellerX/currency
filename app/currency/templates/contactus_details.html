@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Contact Us Details</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+
+<style>
 
 table {
   width:100%;
@@ -24,28 +23,35 @@ th {
   background-color: black;
   color: white;
 }
-</style>
-</head>
 
-<body>
+</style>
+
+{% endblock extra_styles %}
+
+{% block main_content %}
 
 <table>
 
-  <tr>
-    <th>ID</th>
-    <th>email_from</th>
-    <th>subject</th>
-    <th>message</th>
-  </tr>
+    <tr>
+        <th>ID</th>
+        <th>email_from</th>
+        <th>subject</th>
+        <th>message</th>
+        <th>created</th>
+    </tr>
 
-  <tr>
-    <td>{{ object.id }}</td>
-    <td>{{ object.email_from }}</td>
-    <td>{{ object.subject }}</td>
-    <td>{{ object.message }}</td>
-  </tr>
+    <tr>
+        <td>{{ object.id }}</td>
+        <td>{{ object.email_from }}</td>
+        <td>{{ object.subject }}</td>
+        <td>{{ object.message }}</td>
+        <td>{{ object.created }}</td>
+    </tr>
 
 </table>
 
-</body>
-</html>
+<p>
+    <a href="{% url 'currency:contactus-list' %}">Back to List</a>
+</p>
+
+{% endblock main_content %}

@@ -5,6 +5,9 @@ manage_py := python3 ./app/manage.py
 runserver:
 	$(manage_py) runserver
 
+makemigrations:
+	$(manage_py) makemigrations
+
 migrate:
 	$(manage_py) migrate
 
@@ -19,3 +22,9 @@ gen_data_bank:
 
 lint:
 	$ flake8 app/
+
+show_urls:
+	$(manage_py) show_urls
+
+shell:
+	$(manage_py) shell_plus --print-sql

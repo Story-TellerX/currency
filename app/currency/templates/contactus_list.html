@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Contact Us List</title>
-          <style>
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+
+<style>
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -19,31 +18,37 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+
 </style>
-</head>
-<body>
+{% endblock extra_styles %}
+
+{% block main_content %}
 
 <h2>
-  <a href="/currency/contactus/create/">Create ContactUS</a>
+    <a href="{% url 'currency:contact-us-create' %}">Create ContactUS</a>
 </h2>
 
 <table>
-  <tr>
-    <th>ID</th>
-    <th>email_from</th>
-    <th>subject</th>
-    <th>message</th>
+    <tr>
+        <th>ID</th>
+        <th>email_from</th>
+        <th>subject</th>
+        <th>message</th>
+        <th>created</th>
+        <th>details</th>
 
-  </tr>
-    {% for contactus in objects %}
-  <tr>
-    <td>{{ contactus.id }}</td>
-    <td>{{ contactus.email_from }}</td>
-    <td>{{ contactus.subject }}</td>
-    <td>{{ contactus.message }}</td>
-  </tr>
-{% endfor %}
+    </tr>
+    {% for contactus in object_list %}
+    <tr>
+        <td>{{ contactus.id }}</td>
+        <td>{{ contactus.email_from }}</td>
+        <td>{{ contactus.subject }}</td>
+        <td>{{ contactus.message }}</td>
+        <td>{{ contactus.created }}</td>
+        <td><a href="{% url 'currency:contactus-details' contactus.id %}">Details</a></td>
+    </tr>
+    {% endfor %}
 </table>
 
-</body>
-</html>
+{% endblock main_content %}

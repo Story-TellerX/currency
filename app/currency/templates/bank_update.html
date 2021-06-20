@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bank update</title>
-    <style>
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+
+<style>
 button {
   border: none;
   color: white;
@@ -16,23 +15,24 @@ button {
   cursor: pointer;
   background-color: #4CAF50;
 }
+
 </style>
 
-</head>
-<body>
+{% endblock extra_styles %}
 
-<h2>
-instance: {{ form.instance.id }}
+{% block main_content %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Update Bank</button>
-</form>
-<p>
-    <a href="/currency/bank/delete/{{ form.instance.id }}/">Delete</a>
-</p>
-</h2>
 
-</body>
-</html>
+    instance: {{ form.instance.id }}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Bank</button>
+    </form>
+    <p>
+<!--        <a href="/currency/bank/delete/{{ form.instance.id }}/">Delete</a>-->
+        <a href="{% url 'currency:bank-delete' object.id %}">Delete</a>
+    </p>
+
+{% endblock main_content %}

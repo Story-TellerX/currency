@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'annoying',
     'debug_toolbar',
     'rangefilter',
+    'import_export',
 
     'currency',
     # Added comment to display apps

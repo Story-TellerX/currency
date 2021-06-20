@@ -1,10 +1,27 @@
 from django.contrib import admin
-from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
+from import_export.admin import ImportExportModelAdmin
+from rangefilter.filters import DateTimeRangeFilter, DateRangeFilter
 
-from currency.models import Rate
+from currency.models import Rate, Bank, ContactUs
+
+from import_export import resources
 
 
-class RateAdmin(admin.ModelAdmin):
+class RateResource(resources.ModelResource):
+
+    class Meta:
+        model = Rate
+
+
+class BankResource(resources.ModelResource):
+
+    class Meta:
+        model = Bank
+
+
+class RateAdmin(ImportExportModelAdmin):
+    resource_class = RateResource
+
     list_display = (
         'id',
         'source',
@@ -14,12 +31,74 @@ class RateAdmin(admin.ModelAdmin):
         'created',
     )
     list_filter = (
-        ('created_at', DateRangeFilter),
-        ('updated_at', DateTimeRangeFilter),
+        # ('created', DateRangeFilter),
+        ('created', DateTimeRangeFilter),
         'type_curr',
         'source',
         'created',
     )
 
+    search_fields = (
+        'type_curr',
+        'source',
+    )
+
+    readonly_fields = (
+        'id',
+        'buy',
+        'sale',
+    )
+
+
+class BankAdmin(ImportExportModelAdmin):
+    resource_class = BankResource
+
+    list_display = (
+        'id',
+        'name',
+        'url',
+        'number',
+        'created',
+    )
+    list_filter = (
+        ('created', DateRangeFilter),
+        # ('created', DateTimeRangeFilter),
+        'name',
+        'number',
+        'created',
+    )
+
+    search_fields = (
+        'name',
+        'number',
+        'url',
+    )
+
+    readonly_fields = (
+        'id',
+        'created',
+    )
+
+
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'email_from',
+        'subject',
+        'message',
+        'created',
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 admin.site.register(Rate, RateAdmin)
+admin.site.register(Bank, BankAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)

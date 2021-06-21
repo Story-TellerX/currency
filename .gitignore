@@ -131,3 +131,4 @@ dmypy.json
 # Database
 app/db.sqlite3
 .idea/
+app/settings/settings_local.py

@@ -8,6 +8,9 @@ class Rate(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=64)
 
+    def __str__(self):
+        return f'Rate id: {self.id}'
+
 
 class ContactUs(models.Model):
     email_from = models.EmailField(max_length=50)
@@ -15,9 +18,18 @@ class ContactUs(models.Model):
     message = models.CharField(max_length=2500)
     created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'ContactUs id: {self.id}'
+
+    # def save(self, *args, **kwargs):
+    #     return super().save(*args, **kwargs)
+
 
 class Bank(models.Model):
     name = models.CharField(max_length=60)
     url = models.URLField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     number = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'Bank id: {self.id}'

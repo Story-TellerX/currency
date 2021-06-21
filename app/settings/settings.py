@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'annoying',
     'debug_toolbar',
+    'rangefilter',
+    'import_export',
 
     'currency',
     # Added comment to display apps
@@ -137,3 +139,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+try:
+    from settings.settings_local import *  # noqa
+except ImportError:
+    print('No local settings were found!\n'*5)  # noqa

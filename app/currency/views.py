@@ -1,9 +1,10 @@
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
-from currency.forms import RateForm, BankForm
+from currency.forms import RateForm, BankForm, ContactUsForm
 
 
 class IndexTemplateView(TemplateView):
@@ -35,12 +36,13 @@ class RateListView(ListView):
 
 class RateCreateView(CreateView):
     model = Rate
-    fields = (
-        'type_curr',
-        'buy',
-        'sale',
-        'source',
-    )
+    # fields = (
+    #     'type_curr',
+    #     'buy',
+    #     'sale',
+    #     'source',
+    # )
+    form_class = RateForm
     success_url = reverse_lazy('currency:rate-list')
     template_name = 'rate_create.html'
 
@@ -71,11 +73,12 @@ class BankListView(ListView):
 
 class BankCreateView(CreateView):
     model = Bank
-    fields = (
-        'name',
-        'url',
-        'number',
-    )
+    # fields = (
+    #     'name',
+    #     'url',
+    #     'number',
+    # )
+    form_class = BankForm
     success_url = reverse_lazy('currency:bank-list')
     template_name = 'bank_create.html'
 
@@ -106,13 +109,32 @@ class ContactusListView(ListView):
 
 class CreateContactUs(CreateView):
     model = ContactUs
-    fields = (
-        'email_from',
-        'subject',
-        'message',
-    )
+    # fields = (
+    #     'email_from',
+    #     'subject',
+    #     'message',
+    # )
+    form_class = ContactUsForm
     success_url = reverse_lazy('currency:contactus-list')
     template_name = 'contactus_create.html'
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        body = f'''
+        From: {data['email_from']}
+        Topic: {data['subject']}
+
+        Message:
+        {data['message']}
+        '''
+        send_mail(
+            'New Contact Us form is created',
+            body,
+            'testtestapp454545@gmail.com',
+            ['ds_ch@i.ua'],
+            fail_silently=False,
+        )
+        return super().form_valid(form)
 
 
 class ContactusDetailView(DetailView):

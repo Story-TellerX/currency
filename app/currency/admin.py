@@ -77,6 +77,13 @@ class BankAdmin(admin.ModelAdmin):
         'created',
     )
 
+    sortable_by = (
+        'id',
+        'name',
+        'url',
+        'created',
+    )
+
 
 class ContactUsAdmin(ImportExportModelAdmin):
     resource_class = ContactUsResource

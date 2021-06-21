@@ -37,7 +37,7 @@ class RateAdmin(ImportExportModelAdmin):
         'source',
         'created',
     )
-
+    show_full_result_count = True
     search_fields = (
         'type_curr',
         'source',
@@ -51,6 +51,7 @@ class RateAdmin(ImportExportModelAdmin):
 
 
 class BankAdmin(admin.ModelAdmin):
+    ordering = ['id']
     list_display = (
         'id',
         'name',
@@ -65,7 +66,7 @@ class BankAdmin(admin.ModelAdmin):
         'number',
         'created',
     )
-
+    show_full_result_count = True
     search_fields = (
         'name',
         'number',
@@ -94,7 +95,7 @@ class ContactUsAdmin(ImportExportModelAdmin):
         'message',
         'created',
     )
-
+    show_full_result_count = True
     search_fields = (
         'email_from',
         'subject',

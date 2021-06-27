@@ -1,7 +1,7 @@
-from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
+from currency.tasks import send_email_background
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
 from currency.forms import RateForm, BankForm, ContactUsForm
@@ -127,13 +127,15 @@ class CreateContactUs(CreateView):
         Message:
         {data['message']}
         '''
-        send_mail(
-            'New Contact Us form is created',
-            body,
-            'testtestapp454545@gmail.com',
-            ['ds_ch@i.ua'],
-            fail_silently=False,
-        )
+        # send_mail(
+        #     'New Contact Us form is created',
+        #     body,
+        #     'testtestapp454545@gmail.com',
+        #     ['ds_ch@i.ua'],
+        #     fail_silently=False,
+        # )
+        send_email_background.delay(body)
+
         return super().form_valid(form)
 
 

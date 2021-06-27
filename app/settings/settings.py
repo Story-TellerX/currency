@@ -140,7 +140,7 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://localhost'  # Connect broker
 
 try:
     from settings.settings_local import *  # noqa

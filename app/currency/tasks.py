@@ -38,3 +38,8 @@ def send_email_background(body):
         ['ds_ch@i.ua'],
         fail_silently=False,
     )
+
+
+@shared_task()
+def print_hello_world_beat():
+    print('BEAT')

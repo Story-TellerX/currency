@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from celery.schedules import crontab
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -141,6 +143,13 @@ INTERNAL_IPS = [
 ]
 
 CELERY_BROKER_URL = 'amqp://localhost'  # Connect broker
+
+CELERY_BEAT_SCHEDULE = {
+    'print_hello': {
+        'task': 'currency.tasks.print_hello_world_beat',
+        'schedule': crontab(minute='*/1')
+    }
+}
 
 try:
     from settings.settings_local import *  # noqa

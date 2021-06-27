@@ -2,6 +2,9 @@
 
 *This is a tutorial project for developing a backend application using the Django framework.*
 
+*Project using Django templates as frontend, Django framework as backend, 
+RabbitMQ as broker, Celery as workers and crontab (beat) for periodically tasks*
+
 The application collects data on exchange rates.
 
 For install project on Ubuntu 20.04 use:
@@ -31,3 +34,7 @@ For install project on Ubuntu 20.04 use:
 7) For run ipython console with sql print:
 
 `$ python3 ./app/manage.py shell_plus --print-sql`
+
+8) More common commands in the Makefile. For using Makefile commands use construction:
+
+`$ make [command name]`

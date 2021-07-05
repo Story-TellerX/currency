@@ -34,7 +34,7 @@ createsuperuser:
 
 worker:
 	cd app && celery -A settings worker -l info --autoscale=0,20
-# -c 10 or can be used --autoscale=0,20
+
 rabbitmq-start:
 	sudo service rabbitmq-server start
 

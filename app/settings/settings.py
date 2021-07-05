@@ -58,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -145,10 +144,14 @@ INTERNAL_IPS = [
 CELERY_BROKER_URL = 'amqp://localhost'  # Connect broker
 
 CELERY_BEAT_SCHEDULE = {
-    'print_hello': {
+    'print_hello_world': {
         'task': 'currency.tasks.print_hello_world_beat',
-        'schedule': crontab(minute='*/1')
-    }
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_privatbank': {
+        'task': 'currency.tasks.parse_privatbank',
+        'schedule': crontab(minute='*/1'),
+    },
 }
 
 try:

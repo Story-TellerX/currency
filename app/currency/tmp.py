@@ -209,3 +209,22 @@
 #         'count': counter,
 #     }
 #     return render(request, "contactus_create.html", context=context)
+# @shared_task
+# def print_hello_world():
+#     from time import sleep
+#     sleep(10)
+#     print('Hello world from celery process')
+
+
+# @shared_task
+# def print_hello_world(num):
+#     from time import sleep
+#     sleep(num)
+#     print(f'Hello world from celery process wait {num}')
+
+
+# @shared_task
+# def print_hello_world(rate_id):
+#     from currency.models import Rate
+#     rate = Rate.objects.get(id=rate_id)
+#     print(f'Got Rate with id: {rate.id}')

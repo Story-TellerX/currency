@@ -83,6 +83,38 @@ def parse_monobank():
                 )
 
 
+@shared_task()
+def parse_vkurse():
+    from currency.models import Rate
+    url ='http://vkurse.dp.ua/course.json'
+    response = requests.get(url)
+    response.raise_for_status()
+    currencies = response.json()
+    available_currencies_types = ('Dollar', 'Euro')
+    source = 'vkurse'
+    available_currencies_normal = {
+        'Dollar': 'USD',
+        'Euro': 'EUR',
+    }
+    for key, value in currencies.items():
+        if key in available_currencies_types:
+            type_curr_norm = available_currencies_normal[key]
+            buy = to_decimal(value.get('buy'))
+            sale = to_decimal(value.get('sale'))
+            print(type_curr_norm, buy, sale)
+
+            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
+
+            if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
+
+                Rate.objects.create(
+                    type_curr=type_curr_norm,
+                    sale=sale,
+                    buy=buy,
+                    source=source,
+                )
+
+
 @shared_task(
     autoretry_for=(Exception,),
     retry_kwargs={

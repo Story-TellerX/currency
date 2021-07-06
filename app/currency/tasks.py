@@ -42,6 +42,47 @@ def parse_privatbank():
                 )
 
 
+def _get_monobank_currencies():
+    url = 'https://api.monobank.ua/bank/currency'
+    response = requests.get(url)
+    response.raise_for_status()
+    currencies = response.json()
+    return currencies
+
+
+@shared_task()
+def parse_monobank():
+    from currency.models import Rate
+    currencies = _get_monobank_currencies()
+
+    available_currencies_raw = (840, 978)
+    second_type_curr = (980)
+    available_currencies_normal = {
+        840: 'USD',
+        978: 'EUR',
+    }
+    source = 'monobank'
+    for curr in currencies:
+        currencies_type = curr['currencyCodeA']
+        second_pair_currencies_type = curr['currencyCodeB']
+        if currencies_type in available_currencies_raw and second_pair_currencies_type == second_type_curr:
+            type_curr = curr['currencyCodeA']
+            type_curr_norm = available_currencies_normal[type_curr]
+            buy = to_decimal(curr['rateBuy'])
+            sale = to_decimal(curr['rateSell'])
+
+            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
+
+            if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
+
+                Rate.objects.create(
+                    type_curr=type_curr_norm,
+                    sale=sale,
+                    buy=buy,
+                    source=source,
+                )
+
+
 @shared_task(
     autoretry_for=(Exception,),
     retry_kwargs={

@@ -86,7 +86,7 @@ def parse_monobank():
 @shared_task()
 def parse_vkurse():
     from currency.models import Rate
-    url ='http://vkurse.dp.ua/course.json'
+    url = 'http://vkurse.dp.ua/course.json'
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
@@ -101,7 +101,6 @@ def parse_vkurse():
             type_curr_norm = available_currencies_normal[key]
             buy = to_decimal(value.get('buy'))
             sale = to_decimal(value.get('sale'))
-            print(type_curr_norm, buy, sale)
 
             previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
 

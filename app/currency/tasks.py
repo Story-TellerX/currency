@@ -141,7 +141,6 @@ def parse_otp_bank():
         if currencies_type in available_currencies_types and second_pair_currencies_type == second_type_curr:
             buy = to_decimal(curr['BUY'])
             sale = to_decimal(curr['SELL'])
-            print(currencies_type, buy, sale)
 
             previous_rate = Rate.objects.filter(source=source, type_curr=currencies_type).order_by('created').last()
 

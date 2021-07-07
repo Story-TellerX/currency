@@ -153,6 +153,40 @@ def parse_otp_bank():
                 )
 
 
+def _get_iboxbunk_currencies():
+    url = 'https://app.iboxbank.online/api/currency/rate-only-base/UAH'
+    response = requests.get(url)
+    currencies = response.json()
+    currencies_data = currencies['rate']
+    return currencies_data
+
+
+@shared_task()
+def parse_iboxbank():
+    from currency.models import Rate
+
+    currencies = _get_iboxbunk_currencies()
+
+    available_currencies_type = ('USD', 'EUR')
+    source = 'iboxbank'
+
+    for curr in currencies:
+        currencies_type = curr['currency']
+        if currencies_type in available_currencies_type:
+            buy = to_decimal(curr['buyValue'])
+            sale = to_decimal(curr['saleValue'])
+
+            previous_rate = Rate.objects.filter(source=source, type_curr=currencies_type).order_by('created').last()
+
+            if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
+                Rate.objects.create(
+                    type_curr=currencies_type,
+                    sale=sale,
+                    buy=buy,
+                    source=source,
+                )
+
+
 @shared_task(
     autoretry_for=(Exception,),
     retry_kwargs={

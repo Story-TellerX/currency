@@ -160,12 +160,12 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'currency.tasks.parse_vkurse',
         'schedule': crontab(minute='*/15'),
     },
-    'parse_otp': {
-        'task': 'currency.tasks.parse_otp_bank',
-        'schedule': crontab(minute='*/15'),
-    },
     'parse_ibox': {
         'task': 'currency.tasks.parse_iboxbank',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_grant': {
+        'task': 'currency.tasks.parse_grant',
         'schedule': crontab(minute='*/15'),
     },
 }

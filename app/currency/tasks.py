@@ -114,48 +114,10 @@ def parse_vkurse():
                 )
 
 
-def _get_otp_bunk_currencies():
-    url = 'https://ru.otpbank.com.ua/local/components/otp/utils.exchange_rate_smart/exchange_rate_by_date.php?' \
-          'curr_date=07.07.2021&ib_code=otpb_banking_exchange_rates'
-    response = requests.get(url)
-    response.raise_for_status()
-    currencies = response.json()
-    return currencies
-
-
-@shared_task()
-def parse_otp_bank():
-    from currency.models import Rate
-
-    currencies = _get_otp_bunk_currencies()
-    currencies_value = currencies.get('items')
-
-    available_currencies_types = ('USD', 'EUR')
-    second_type_curr = ('UAH')
-
-    source = 'otp bank'
-
-    for curr in currencies_value:
-        currencies_type = curr['NAME']
-        second_pair_currencies_type = curr['CHANGE']
-        if currencies_type in available_currencies_types and second_pair_currencies_type == second_type_curr:
-            buy = to_decimal(curr['BUY'])
-            sale = to_decimal(curr['SELL'])
-
-            previous_rate = Rate.objects.filter(source=source, type_curr=currencies_type).order_by('created').last()
-
-            if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
-                Rate.objects.create(
-                    type_curr=currencies_type,
-                    sale=sale,
-                    buy=buy,
-                    source=source,
-                )
-
-
 def _get_iboxbunk_currencies():
     url = 'https://app.iboxbank.online/api/currency/rate-only-base/UAH'
     response = requests.get(url)
+    response.raise_for_status()
     currencies = response.json()
     currencies_data = currencies['rate']
     return currencies_data
@@ -181,6 +143,45 @@ def parse_iboxbank():
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
                 Rate.objects.create(
                     type_curr=currencies_type,
+                    sale=sale,
+                    buy=buy,
+                    source=source,
+                )
+
+
+def _get_grant_currencies():
+    url = 'https://ws.grant.ua/api/rates'
+    response = requests.get(url)
+    response.raise_for_status()
+    currencies = response.json()
+    return currencies
+
+
+@shared_task()
+def parse_grant():
+    from currency.models import Rate
+
+    currencies = _get_grant_currencies()
+
+    available_currencies_types = ('USD', 'EUR')
+    available_currencies_normal = {
+        '840': 'USD',
+        '978': 'EUR',
+    }
+    source = 'grantbank'
+
+    for key, value in currencies.items():
+        if key in available_currencies_types:
+            type_curr_norm = available_currencies_normal[value.get('cur_ref')]
+            buy = to_decimal(value.get('k_buy'))
+            sale = to_decimal(value.get('k_sale'))
+
+            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
+
+            if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
+
+                Rate.objects.create(
+                    type_curr=type_curr_norm,
                     sale=sale,
                     buy=buy,
                     source=source,

@@ -188,6 +188,46 @@ def parse_grant():
                 )
 
 
+def _get_sky_currencies():
+    url = 'https://tascombank.ua/api/currencies'
+    response = requests.get(url)
+    response.raise_for_status()
+    currencies = response.json()
+    currencies_curr = currencies[0]
+    all_elements_of_the_list = dict(enumerate(currencies_curr))
+    return all_elements_of_the_list
+
+
+@shared_task()
+def parse_skybank():
+    from currency.models import Rate
+
+    currencies = _get_sky_currencies()
+
+    available_currencies_type = ('USD', 'EUR')
+    type_for_curr_real = 'exchange'
+
+    source = 'skybank'
+
+    for key, value in currencies.items():
+        exchange_id = value.get('kurs_type')
+        short_name = value.get('short_name')
+        if exchange_id in type_for_curr_real and short_name in available_currencies_type:
+            name_for_curr = value.get('short_name')
+            buy = to_decimal(value.get('kurs_buy'))
+            sale = to_decimal(value.get('kurs_sale'))
+
+            previous_rate = Rate.objects.filter(source=source, type_curr=name_for_curr).order_by('created').last()
+
+            if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
+                Rate.objects.create(
+                    type_curr=name_for_curr,
+                    sale=sale,
+                    buy=buy,
+                    source=source,
+                )
+
+
 @shared_task(
     autoretry_for=(Exception,),
     retry_kwargs={

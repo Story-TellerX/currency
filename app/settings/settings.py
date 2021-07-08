@@ -168,6 +168,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'currency.tasks.parse_grant',
         'schedule': crontab(minute='*/15'),
     },
+    'parse_sky': {
+        'task': 'currency.tasks.parse_skybank',
+        'schedule': crontab(minute='*/15'),
+    },
 }
 
 try:

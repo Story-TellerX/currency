@@ -4,8 +4,7 @@ import requests
 from currency.utils import to_decimal
 
 
-def _get_privatbank_currencies():
-    url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
+def _get_privat_and_mono_currencies(url):
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
@@ -15,8 +14,9 @@ def _get_privatbank_currencies():
 @shared_task()
 def parse_privatbank():
     from currency.models import Rate
+    url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
 
-    currencies = _get_privatbank_currencies()
+    currencies = _get_privat_and_mono_currencies(url)
 
     available_currencies_types = ('USD', 'EUR')
 
@@ -42,18 +42,11 @@ def parse_privatbank():
                 )
 
 
-def _get_monobank_currencies():
-    url = 'https://api.monobank.ua/bank/currency'
-    response = requests.get(url)
-    response.raise_for_status()
-    currencies = response.json()
-    return currencies
-
-
 @shared_task()
 def parse_monobank():
     from currency.models import Rate
-    currencies = _get_monobank_currencies()
+    url = 'https://api.monobank.ua/bank/currency'
+    currencies = _get_privat_and_mono_currencies(url)
 
     available_currencies_raw = (840, 978)
     second_type_curr = (980)

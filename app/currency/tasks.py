@@ -2,6 +2,7 @@ from celery import shared_task
 from django.core.mail import send_mail
 import requests
 from currency.utils import to_decimal
+from currency import choices
 
 
 def _get_privat_and_mono_currencies(url):
@@ -18,13 +19,17 @@ def parse_privatbank():
 
     currencies = _get_privat_and_mono_currencies(url)
 
-    available_currencies_types = ('USD', 'EUR')
+    available_currencies_types = {
+        'USD': choices.RATE_TYPE_USD,
+        'EUR': choices.RATE_TYPE_EUR,
+    }
 
     source = 'privatbank'
 
     for curr in currencies:
         currencies_type = curr['ccy']
         if currencies_type in available_currencies_types:
+            currencies_type = available_currencies_types[curr['ccy']]
             buy = to_decimal(curr['buy'])
             sale = to_decimal(curr['sale'])
 
@@ -48,28 +53,32 @@ def parse_monobank():
     url = 'https://api.monobank.ua/bank/currency'
     currencies = _get_privat_and_mono_currencies(url)
 
-    available_currencies_raw = (840, 978)
-    second_type_curr = 980
-    available_currencies_normal = {
-        840: 'USD',
-        978: 'EUR',
+    # available_currencies_raw = (840, 978)
+    available_currencies_raw = {
+        840: choices.RATE_TYPE_USD,
+        978: choices.RATE_TYPE_EUR,
     }
+    second_type_curr = 980
+    # available_currencies_normal = {
+    #     840: choices.RATE_TYPE_USD,
+    #     978: choices.RATE_TYPE_EUR,
+    # }
     source = 'monobank'
     for curr in currencies:
         currencies_type = curr['currencyCodeA']
         second_pair_currencies_type = curr['currencyCodeB']
         if currencies_type in available_currencies_raw and second_pair_currencies_type == second_type_curr:
-            type_curr = curr['currencyCodeA']
-            type_curr_norm = available_currencies_normal[type_curr]
+            type_curr = available_currencies_raw[curr['currencyCodeA']]
+            # type_curr_norm = available_currencies_normal[type_curr]
             buy = to_decimal(curr['rateBuy'])
             sale = to_decimal(curr['rateSell'])
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
+            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
 
                 Rate.objects.create(
-                    type_curr=type_curr_norm,
+                    type_curr=type_curr,
                     sale=sale,
                     buy=buy,
                     source=source,
@@ -83,15 +92,18 @@ def parse_vkurse():
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
-    available_currencies_types = ('Dollar', 'Euro')
-    source = 'vkurse'
-    available_currencies_normal = {
-        'Dollar': 'USD',
-        'Euro': 'EUR',
+    available_currencies_types = {
+        'Dollar': choices.RATE_TYPE_USD,
+        'Euro': choices.RATE_TYPE_EUR,
     }
+    source = 'vkurse'
+    # available_currencies_normal = {
+    #     'Dollar': choices.RATE_TYPE_USD,
+    #     'Euro': choices.RATE_TYPE_EUR,
+    # }
     for key, value in currencies.items():
         if key in available_currencies_types:
-            type_curr_norm = available_currencies_normal[key]
+            type_curr_norm = available_currencies_types[key]
             buy = to_decimal(value.get('buy'))
             sale = to_decimal(value.get('sale'))
 
@@ -122,12 +134,16 @@ def parse_iboxbank():
 
     currencies = _get_iboxbunk_currencies()
 
-    available_currencies_type = ('USD', 'EUR')
+    available_currencies_type = {
+        'USD': choices.RATE_TYPE_USD,
+        'EUR': choices.RATE_TYPE_EUR,
+    }
     source = 'iboxbank'
 
     for curr in currencies:
         currencies_type = curr['currency']
         if currencies_type in available_currencies_type:
+            currencies_type = available_currencies_type[curr['currency']]
             buy = to_decimal(curr['buyValue'])
             sale = to_decimal(curr['saleValue'])
 
@@ -158,8 +174,8 @@ def parse_grant():
 
     available_currencies_types = ('USD', 'EUR')
     available_currencies_normal = {
-        '840': 'USD',
-        '978': 'EUR',
+        '840': choices.RATE_TYPE_USD,
+        '978': choices.RATE_TYPE_EUR,
     }
     source = 'grantbank'
 
@@ -197,7 +213,10 @@ def parse_skybank():
 
     currencies = _get_sky_currencies()
 
-    available_currencies_type = ('USD', 'EUR')
+    available_currencies_type = {
+        'USD': choices.RATE_TYPE_USD,
+        'EUR': choices.RATE_TYPE_EUR,
+    }
     type_for_curr_real = 'exchange'
 
     source = 'skybank'
@@ -206,7 +225,7 @@ def parse_skybank():
         exchange_id = value.get('kurs_type')
         short_name = value.get('short_name')
         if exchange_id in type_for_curr_real and short_name in available_currencies_type:
-            name_for_curr = value.get('short_name')
+            name_for_curr = available_currencies_type[value.get('short_name')]
             buy = to_decimal(value.get('kurs_buy'))
             sale = to_decimal(value.get('kurs_sale'))
 

@@ -4,6 +4,7 @@ from currency import choices
 
 
 class Rate(models.Model):
+    # get_{field_name}_display()
     type_curr = PositiveSmallIntegerField(choices=choices.RATE_TYPE_CHOICES)
     sale = models.DecimalField(max_digits=5, decimal_places=2)
     buy = models.DecimalField(max_digits=5, decimal_places=2)

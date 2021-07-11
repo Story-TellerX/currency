@@ -49,7 +49,7 @@ def parse_monobank():
     currencies = _get_privat_and_mono_currencies(url)
 
     available_currencies_raw = (840, 978)
-    second_type_curr = (980)
+    second_type_curr = 980
     available_currencies_normal = {
         840: 'USD',
         978: 'EUR',

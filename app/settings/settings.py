@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from celery.schedules import crontab
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -56,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -141,6 +142,37 @@ INTERNAL_IPS = [
 ]
 
 CELERY_BROKER_URL = 'amqp://localhost'  # Connect broker
+
+CELERY_BEAT_SCHEDULE = {
+    'print_hello_world': {
+        'task': 'currency.tasks.print_hello_world_beat',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_privatbank': {
+        'task': 'currency.tasks.parse_privatbank',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_monobank': {
+        'task': 'currency.tasks.parse_monobank',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_vkurse': {
+        'task': 'currency.tasks.parse_vkurse',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_ibox': {
+        'task': 'currency.tasks.parse_iboxbank',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_grant': {
+        'task': 'currency.tasks.parse_grant',
+        'schedule': crontab(minute='*/15'),
+    },
+    'parse_sky': {
+        'task': 'currency.tasks.parse_skybank',
+        'schedule': crontab(minute='*/15'),
+    },
+}
 
 try:
     from settings.settings_local import *  # noqa

@@ -1,4 +1,4 @@
-from currency.models import AnalyticsLog
+# from currency.models import AnalyticsLog
 
 
 class AnalyticsMiddleware:

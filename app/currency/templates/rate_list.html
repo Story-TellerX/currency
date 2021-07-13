@@ -42,7 +42,8 @@ tr:nth-child(even) {
     {% for rate in object_list %}
     <tr>
         <td>{{ rate.id }}</td>
-        <td>{{ rate.type_curr }}</td>
+<!--        <td>{{ rate.type_curr }}</td>-->
+        <td>{{ rate.get_type_curr_display }}</td>
         <td>{{ rate.buy }}</td>
         <td>{{ rate.sale }}</td>
         <td>{{ rate.created }}</td>

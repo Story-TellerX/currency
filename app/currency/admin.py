@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from rangefilter.filters import DateTimeRangeFilter, DateRangeFilter
+from rangefilter.filters import DateTimeRangeFilter  # DateRangeFilter
 
 from currency.models import Rate, Bank, ContactUs
 
@@ -55,16 +55,14 @@ class BankAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
+        'original_url',
         'url',
         'number',
-        'created',
     )
     list_filter = (
-        ('created', DateRangeFilter),
         # ('created', DateTimeRangeFilter),
         'name',
         'number',
-        'created',
     )
     show_full_result_count = True
     search_fields = (
@@ -75,14 +73,14 @@ class BankAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'id',
-        'created',
+        'url',
     )
 
     sortable_by = (
         'id',
         'name',
         'url',
-        'created',
+        'original_url',
     )
 
 

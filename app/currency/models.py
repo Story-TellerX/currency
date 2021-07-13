@@ -54,6 +54,6 @@ class AnalyticsLog(models.Model):
 
     class Meta:
         unique_together = [
-            ['path', 'request_method'],
-            # ['request_method', 'status_code'],
+            # ['path', 'request_method'],
+            ['path', 'status_code'],
         ]

@@ -25,6 +25,7 @@ class RateAdmin(ImportExportModelAdmin):
     list_display = (
         'id',
         'source',
+        'bank_id',
         'type_curr',
         'buy',
         'sale',

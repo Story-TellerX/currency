@@ -31,7 +31,7 @@ class HelloWorld(TemplateView):
 
 class RateListView(ListView):
     template_name = 'rate_list.html'
-    queryset = Rate.objects.all()
+    queryset = Rate.objects.all().select_related('bank')
 
 
 class RateCreateView(CreateView):
@@ -40,7 +40,7 @@ class RateCreateView(CreateView):
     #     'type_curr',
     #     'buy',
     #     'sale',
-    #     'source',
+    #     'bank',
     # )
     form_class = RateForm
     success_url = reverse_lazy('currency:rate-list')

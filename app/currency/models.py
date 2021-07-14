@@ -6,7 +6,7 @@ from currency import choices, consts
 class Bank(models.Model):
     name = models.CharField(max_length=64)
     code_name = models.CharField(
-        max_length=64, default=consts.CODE_NAME_PRIVATBANK)
+        max_length=64)
     url = models.URLField()
     original_url = models.URLField()
     number = models.CharField(max_length=30)

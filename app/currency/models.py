@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import PositiveSmallIntegerField
-from currency import choices, consts
+from currency import choices
 
 
 class Bank(models.Model):

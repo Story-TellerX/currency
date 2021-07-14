@@ -24,8 +24,7 @@ class RateAdmin(ImportExportModelAdmin):
 
     list_display = (
         'id',
-        'source',
-        'bank_id',
+        'bank',
         'type_curr',
         'buy',
         'sale',
@@ -35,13 +34,11 @@ class RateAdmin(ImportExportModelAdmin):
         # ('created', DateRangeFilter),
         ('created', DateTimeRangeFilter),
         'type_curr',
-        'source',
         'created',
     )
     show_full_result_count = True
     search_fields = (
         'type_curr',
-        'source',
     )
 
     readonly_fields = (
@@ -56,6 +53,7 @@ class BankAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
+        'code_name',
         'original_url',
         'url',
         'number',
@@ -74,7 +72,6 @@ class BankAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'id',
-        'url',
     )
 
     sortable_by = (

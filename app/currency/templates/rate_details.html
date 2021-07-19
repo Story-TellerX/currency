@@ -24,12 +24,13 @@ th {
 }
 
 
+
 </style>
 
 {% endblock extra_styles %}
 
 {% block main_content %}
-
+{% if request.user.is_authenticated %}
 <table>
     <tr>
         <th>ID</th>
@@ -47,12 +48,14 @@ th {
         <td>{{ object.created }}</td>
         <td>{{ object.bank.name }}</td>
     </tr>
+    <a href="{% url 'currency:rate-list' %}">Back to List</a>
 
 </table>
-
+{% else %}
 <p>
     <a href="{% url 'currency:rate-list' %}">Back to List</a>
 </p>
+{% endif %}
 
 
 <!--{% if object %}-->

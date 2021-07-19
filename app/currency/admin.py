@@ -21,7 +21,6 @@ class ContactUsResource(resources.ModelResource):
 
 class RateAdmin(ImportExportModelAdmin):
     resource_class = RateResource
-
     list_display = (
         'id',
         'bank',

@@ -4,6 +4,21 @@
 {% block main_content %}
 <!--    <a href="/currency/rate/list/">Rate List</a>-->
 <h2>
+    {% if request.user.is_authenticated %}
+    <p>
+        <a href="{% url 'logout' %}">Logout</a>
+    </p>
+    <p>
+        <a href="{% url 'accounts:my-profile' %}">My Profile</a>
+    </p>
+    {% else %}
+    <p>
+        <a href="{% url 'login' %}">Login</a>
+    </p>
+    <p>
+        <a href="#">Sign Up</a>
+    </p>
+    {% endif %}
     <p>
         <a href="{% url 'currency:hello-world' %}">Hello from Class</a>
     </p>

@@ -23,4 +23,6 @@ urlpatterns = [
     path('', IndexTemplateView.as_view(), name='index'),
     path('currency/', include('currency.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
+    path('auth/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
 ]

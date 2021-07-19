@@ -14,6 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from celery.schedules import crontab
+from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'import_export',
 
     'currency',
+    'accounts',
     # Added comment to display apps
 ]
 
@@ -174,6 +176,15 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/15'),
     },
 }
+
+SHELL_PLUS_IMPORTS = [
+    'from currency.tasks import parse_privatbank',
+]
+
+AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 try:
     from settings.settings_local import *  # noqa

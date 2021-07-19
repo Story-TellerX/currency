@@ -54,6 +54,11 @@ class RateDetailView(LoginRequiredMixin, DetailView):
     # model = Rate
     queryset = Rate.objects.all()
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class RateUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'rate_update.html'

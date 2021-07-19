@@ -2,7 +2,7 @@ from celery import shared_task
 from django.core.mail import send_mail
 import requests
 from currency.utils import to_decimal
-from currency import choices
+from currency import choices, consts
 
 
 def _get_privat_and_mono_currencies(url):
@@ -14,17 +14,15 @@ def _get_privat_and_mono_currencies(url):
 
 @shared_task()
 def parse_privatbank():
-    from currency.models import Rate
-    url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
+    from currency.models import Rate, Bank
 
-    currencies = _get_privat_and_mono_currencies(url)
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
+    currencies = _get_privat_and_mono_currencies(bank.url)
 
     available_currencies_types = {
         'USD': choices.RATE_TYPE_USD,
         'EUR': choices.RATE_TYPE_EUR,
     }
-
-    source = 'privatbank'
 
     for curr in currencies:
         currencies_type = curr['ccy']
@@ -33,7 +31,7 @@ def parse_privatbank():
             buy = to_decimal(curr['buy'])
             sale = to_decimal(curr['sale'])
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=currencies_type).order_by('created').last()
+            previous_rate = Rate.objects.filter(bank=bank, type_curr=currencies_type).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
                 # previous_rate is None or  # Check for no exist rate
@@ -43,15 +41,15 @@ def parse_privatbank():
                     type_curr=currencies_type,
                     sale=sale,
                     buy=buy,
-                    source=source,
+                    bank=bank,
                 )
 
 
 @shared_task()
 def parse_monobank():
-    from currency.models import Rate
-    url = 'https://api.monobank.ua/bank/currency'
-    currencies = _get_privat_and_mono_currencies(url)
+    from currency.models import Rate, Bank
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_MONOBANK)
+    currencies = _get_privat_and_mono_currencies(bank.url)
 
     # available_currencies_raw = (840, 978)
     available_currencies_raw = {
@@ -63,7 +61,6 @@ def parse_monobank():
     #     840: choices.RATE_TYPE_USD,
     #     978: choices.RATE_TYPE_EUR,
     # }
-    source = 'monobank'
     for curr in currencies:
         currencies_type = curr['currencyCodeA']
         second_pair_currencies_type = curr['currencyCodeB']
@@ -73,7 +70,7 @@ def parse_monobank():
             buy = to_decimal(curr['rateBuy'])
             sale = to_decimal(curr['rateSell'])
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr).order_by('created').last()
+            previous_rate = Rate.objects.filter(bank=bank, type_curr=type_curr).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
 
@@ -81,22 +78,21 @@ def parse_monobank():
                     type_curr=type_curr,
                     sale=sale,
                     buy=buy,
-                    source=source,
+                    bank=bank,
                 )
 
 
 @shared_task()
 def parse_vkurse():
-    from currency.models import Rate
-    url = 'http://vkurse.dp.ua/course.json'
-    response = requests.get(url)
+    from currency.models import Rate, Bank
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_VKURSE)
+    response = requests.get(bank.url)
     response.raise_for_status()
     currencies = response.json()
     available_currencies_types = {
         'Dollar': choices.RATE_TYPE_USD,
         'Euro': choices.RATE_TYPE_EUR,
     }
-    source = 'vkurse'
     # available_currencies_normal = {
     #     'Dollar': choices.RATE_TYPE_USD,
     #     'Euro': choices.RATE_TYPE_EUR,
@@ -107,7 +103,7 @@ def parse_vkurse():
             buy = to_decimal(value.get('buy'))
             sale = to_decimal(value.get('sale'))
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
+            previous_rate = Rate.objects.filter(bank=bank, type_curr=type_curr_norm).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
 
@@ -115,12 +111,11 @@ def parse_vkurse():
                     type_curr=type_curr_norm,
                     sale=sale,
                     buy=buy,
-                    source=source,
+                    bank=bank,
                 )
 
 
-def _get_iboxbunk_currencies():
-    url = 'https://app.iboxbank.online/api/currency/rate-only-base/UAH'
+def _get_iboxbunk_currencies(url):
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
@@ -130,16 +125,15 @@ def _get_iboxbunk_currencies():
 
 @shared_task()
 def parse_iboxbank():
-    from currency.models import Rate
+    from currency.models import Rate, Bank
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_IBOX)
 
-    currencies = _get_iboxbunk_currencies()
+    currencies = _get_iboxbunk_currencies(bank.url)
 
     available_currencies_type = {
         'USD': choices.RATE_TYPE_USD,
         'EUR': choices.RATE_TYPE_EUR,
     }
-    source = 'iboxbank'
-
     for curr in currencies:
         currencies_type = curr['currency']
         if currencies_type in available_currencies_type:
@@ -147,19 +141,18 @@ def parse_iboxbank():
             buy = to_decimal(curr['buyValue'])
             sale = to_decimal(curr['saleValue'])
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=currencies_type).order_by('created').last()
+            previous_rate = Rate.objects.filter(bank=bank, type_curr=currencies_type).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
                 Rate.objects.create(
                     type_curr=currencies_type,
                     sale=sale,
                     buy=buy,
-                    source=source,
+                    bank=bank,
                 )
 
 
-def _get_grant_currencies():
-    url = 'https://ws.grant.ua/api/rates'
+def _get_grant_currencies(url):
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
@@ -168,16 +161,15 @@ def _get_grant_currencies():
 
 @shared_task()
 def parse_grant():
-    from currency.models import Rate
-
-    currencies = _get_grant_currencies()
+    from currency.models import Rate, Bank
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_GRANT)
+    currencies = _get_grant_currencies(bank.url)
 
     available_currencies_types = ('USD', 'EUR')
     available_currencies_normal = {
         '840': choices.RATE_TYPE_USD,
         '978': choices.RATE_TYPE_EUR,
     }
-    source = 'grantbank'
 
     for key, value in currencies.items():
         if key in available_currencies_types:
@@ -185,7 +177,7 @@ def parse_grant():
             buy = to_decimal(value.get('k_buy'))
             sale = to_decimal(value.get('k_sale'))
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=type_curr_norm).order_by('created').last()
+            previous_rate = Rate.objects.filter(bank=bank, type_curr=type_curr_norm).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
 
@@ -193,12 +185,11 @@ def parse_grant():
                     type_curr=type_curr_norm,
                     sale=sale,
                     buy=buy,
-                    source=source,
+                    bank=bank,
                 )
 
 
-def _get_sky_currencies():
-    url = 'https://tascombank.ua/api/currencies'
+def _get_sky_currencies(url):
     response = requests.get(url)
     response.raise_for_status()
     currencies = response.json()
@@ -209,17 +200,16 @@ def _get_sky_currencies():
 
 @shared_task()
 def parse_skybank():
-    from currency.models import Rate
+    from currency.models import Rate, Bank
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_SKY)
 
-    currencies = _get_sky_currencies()
+    currencies = _get_sky_currencies(bank.url)
 
     available_currencies_type = {
         'USD': choices.RATE_TYPE_USD,
         'EUR': choices.RATE_TYPE_EUR,
     }
     type_for_curr_real = 'exchange'
-
-    source = 'skybank'
 
     for key, value in currencies.items():
         exchange_id = value.get('kurs_type')
@@ -229,14 +219,14 @@ def parse_skybank():
             buy = to_decimal(value.get('kurs_buy'))
             sale = to_decimal(value.get('kurs_sale'))
 
-            previous_rate = Rate.objects.filter(source=source, type_curr=name_for_curr).order_by('created').last()
+            previous_rate = Rate.objects.filter(bank=bank, type_curr=name_for_curr).order_by('created').last()
 
             if previous_rate is None or previous_rate.sale != sale or previous_rate.buy != buy:
                 Rate.objects.create(
                     type_curr=name_for_curr,
                     sale=sale,
                     buy=buy,
-                    source=source,
+                    bank=bank,
                 )
 
 

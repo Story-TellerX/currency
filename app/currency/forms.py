@@ -10,7 +10,7 @@ class RateForm(forms.ModelForm):
             'type_curr',
             'buy',
             'sale',
-            'source',
+            'bank',
         )
 
 

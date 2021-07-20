@@ -25,7 +25,7 @@ button {
 
 
 <!--instance: {{ form.instance.id }}-->
-
+{% if request.user.is_superuser %}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
@@ -35,6 +35,10 @@ button {
     <!--    <a href="/currency/rate/delete/{{ form.instance.id }}/">Delete</a>-->
     <a href="{% url 'currency:rate-delete' rate.id %}">Delete</a>
 </p>
-
+{% else %}
+<p>
+    <a href="{% url 'currency:rate-list' %}">Back to List</a>
+</p>
+{% endif %}
 
 {% endblock main_content %}

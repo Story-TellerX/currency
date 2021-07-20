@@ -36,8 +36,4 @@ class Migration(migrations.Migration):
             name='url',
             field=models.URLField(),
         ),
-        migrations.AlterUniqueTogether(
-            name='analyticslog',
-            unique_together={('path', 'status_code')},
-        ),
     ]

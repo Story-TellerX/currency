@@ -53,8 +53,8 @@ class AnalyticsLog(models.Model):
     request_method = PositiveSmallIntegerField(choices=choices.REQUEST_METHOD_CHOICES)
     status_code = models.CharField(max_length=3)
 
-    class Meta:
-        unique_together = [
-            # ['path', 'request_method'],
-            ['path', 'status_code'],
-        ]
+    # class Meta:
+    #     # unique_together = [
+    #     #     # ['path', 'request_method'],
+    #     #     ['path', 'status_code'],
+    #     # ]

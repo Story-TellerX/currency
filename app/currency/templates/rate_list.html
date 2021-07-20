@@ -37,7 +37,9 @@ tr:nth-child(even) {
         <th>DATE AND TIME OF CREATION</th>
         <th>SOURCE</th>
         <th>DETAILS</th>
+        {% if request.user.is_superuser %}
         <th>EDIT</th>
+        {% endif %}
     </tr>
     {% for rate in object_list %}
     <tr>
@@ -49,7 +51,9 @@ tr:nth-child(even) {
         <td>{{ rate.created }}</td>
         <td>{{ rate.bank.name }}</td>
         <td><a href="{% url 'currency:rate-details' rate.id %}">Details</a></td>
+        {% if request.user.is_superuser %}
         <td><a href="{% url 'currency:rate-update' rate.id %}">Edit</a></td>
+        {% endif %}
 <!--        <td><a href="/currency/rate/update/{{ rate.id }}/">Edit</a></td>-->
     </tr>
     {% endfor %}

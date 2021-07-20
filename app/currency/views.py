@@ -64,7 +64,12 @@ class RateDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             return True
         if self.request.user.is_superuser:
             return True
-        return False
+
+    def dispatch(self, request, *args, **kwargs):
+        user_test_result = self.get_test_func()()
+        if not user_test_result:
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class RateUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -83,6 +88,12 @@ class RateUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+    def dispatch(self, request, *args, **kwargs):
+        user_test_result = self.get_test_func()()
+        if not user_test_result:
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class RateDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     queryset = Rate.objects.all()
@@ -97,6 +108,12 @@ class RateDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user.is_superuser:
             return True
         return False
+
+    def dispatch(self, request, *args, **kwargs):
+        user_test_result = self.get_test_func()()
+        if not user_test_result:
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class BankListView(ListView):

@@ -1,4 +1,4 @@
-from annoying.functions import get_object_or_None
+# from annoying.functions import get_object_or_None
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -6,6 +6,7 @@ from django.views.generic import UpdateView, CreateView, RedirectView
 
 from accounts.forms import SignUpForm
 from accounts.models import User
+from accounts.tokens import account_activation_token
 
 
 class MyProfile(LoginRequiredMixin, UpdateView):
@@ -43,14 +44,17 @@ class ActivateAccount(RedirectView):
     """
 
     def get_redirect_url(self, *args, **kwargs):
-        activation_key = kwargs.pop('activation_key')
-        user = get_object_or_None(User.objects.only('is_active'), username=activation_key)
-        if user:
+        activation_key = kwargs.get('activation_key')
+        activation_token = kwargs.get('token')
+        # user = get_object_or_None(User.objects.only('is_active'), username=activation_key)
+        user = User.objects.get(username=activation_key)
+        if user and account_activation_token.check_token(user, activation_token):
             if user.is_active:
                 messages.warning(self.request, 'Your account is already activated.')
             else:
                 messages.info(self.request, 'Thanks for activating your account.')
                 user.is_active = True
                 user.save(update_fields=('is_active', ))
-        response = super().get_redirect_url(*args, **kwargs)
+        # response = super().get_redirect_url(*args, **kwargs)
+        response = super().get_redirect_url()
         return response

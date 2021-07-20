@@ -6,6 +6,8 @@ from accounts.models import User
 from accounts.tasks import send_registration_email
 from django.conf import settings
 
+from accounts.tokens import account_activation_token
+
 
 class SignUpForm(forms.ModelForm):
 
@@ -41,13 +43,14 @@ class SignUpForm(forms.ModelForm):
         instance.is_active = False
         # instance.password = self.cleaned_data['password1']  # WRONG
         instance.set_password(self.cleaned_data['password1'])
+        user_token = account_activation_token.make_token(instance)
 
         if commit:
             instance.save()
 
         body = f'''
         Activate Your Account
-        {settings.DOMAIN}{reverse('accounts:activate-account', args=(instance.username, ))}
+        {settings.DOMAIN}{reverse('accounts:activate-account', args=(instance.username, user_token))}
         '''
 
         send_registration_email.delay(body, self.cleaned_data['email'])

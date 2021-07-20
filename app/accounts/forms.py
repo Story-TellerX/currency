@@ -9,8 +9,8 @@ from django.conf import settings
 
 class SignUpForm(forms.ModelForm):
 
-    password1 = forms.CharField()
-    password2 = forms.CharField()
+    password1 = forms.CharField(widget=forms.PasswordInput())
+    password2 = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = User

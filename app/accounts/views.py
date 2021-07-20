@@ -44,13 +44,13 @@ class ActivateAccount(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         activation_key = kwargs.pop('activation_key')
-        user = get_object_or_None(User, username=activation_key)
+        user = get_object_or_None(User.objects.only('is_active'), username=activation_key)
         if user:
             if user.is_active:
                 messages.warning(self.request, 'Your account is already activated.')
             else:
                 messages.info(self.request, 'Thanks for activating your account.')
                 user.is_active = True
-                user.save()
+                user.save(update_fields=('is_active', ))
         response = super().get_redirect_url(*args, **kwargs)
         return response

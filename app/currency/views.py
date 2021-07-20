@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+# from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
@@ -49,38 +49,54 @@ class RateCreateView(CreateView):
     template_name = 'rate_create.html'
 
 
-class RateDetailView(LoginRequiredMixin, DetailView):
+class RateDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     template_name = 'rate_details.html'
     # model = Rate
     queryset = Rate.objects.all()
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not request.user.is_authenticated:
+    #         raise PermissionDenied()
+    #     return super().dispatch(request, *args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            return True
+        if self.request.user.is_superuser:
+            return True
+        return False
 
 
-class RateUpdateView(LoginRequiredMixin, UpdateView):
+class RateUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'rate_update.html'
     queryset = Rate.objects.all()
     success_url = reverse_lazy('currency:rate-list')
     form_class = RateForm
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not request.user.is_superuser:
+    #         raise PermissionDenied()
+    #     return super().dispatch(request, *args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.is_superuser:
+            return True
+        return False
 
 
-class RateDeleteView(DeleteView):
+class RateDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     queryset = Rate.objects.all()
     template_name = 'rate_confirm_delete.html'
     success_url = reverse_lazy('currency:rate-list')
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not request.user.is_superuser:
+    #         raise PermissionDenied()
+    #     return super().dispatch(request, *args, **kwargs)
+    def test_func(self):
+        if self.request.user.is_superuser:
+            return True
+        return False
 
 
 class BankListView(ListView):

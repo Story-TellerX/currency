@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rangefilter',
     'import_export',
     'active_link',
+    'crispy_forms',
 
     'currency',
     'accounts',
@@ -184,6 +185,8 @@ CELERY_BEAT_SCHEDULE = {
 SHELL_PLUS_IMPORTS = [
     'from currency.tasks import parse_privatbank',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'accounts.User'
 

@@ -2,9 +2,10 @@
 
 {% block main_content %}
 
+      <div class="container">
 <form method="post">
     {% csrf_token %}
     <button type="submit">Delete</button>
 </form>
-
+      </div>
 {% endblock main_content %}

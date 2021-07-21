@@ -1,32 +1,12 @@
 {% extends 'base.html' %}
-{% block extra_styles %}
-
-<style>
-button {
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  background-color: #008CBA;
-}
-
-
-</style>
-{% endblock extra_styles %}
 
 {% block main_content %}
-
+{% load crispy_forms_tags %}
+      <div class="container">
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <h2>
-        {{ form.as_p }}
-    </h2>
+    {{ form | crispy }}
     <button type="submit">Create Bank</button>
 </form>
-
+      </div>
 {% endblock main_content %}

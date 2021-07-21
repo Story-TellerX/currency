@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
+                    <div class="image-container">
+                        <img class="img-fluid rounded-circle" src="{{ request.user.get_avatar_url }}" width="250px">
+                    </div> <!-- end of image-container -->
+
+
 Update My Profile
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -12,3 +17,4 @@ Update My Profile
 
 
 {% endblock main_content %}
+<!--                        <img class="img-fluid" src="{{ request.user.avatar.url }}">-->

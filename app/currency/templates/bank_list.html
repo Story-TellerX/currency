@@ -30,6 +30,7 @@ tr:nth-child(even) {
 <table>
     <tr>
         <th>ID</th>
+        <th>LOGO</th>
         <th>NAME</th>
         <th>URL</th>
         <th>CREATED</th>
@@ -40,6 +41,7 @@ tr:nth-child(even) {
     {% for bank in object_list %}
     <tr>
         <td>{{ bank.id }}</td>
+        <td><img class="img-fluid img-thumbnail" src="{{ bank.get_logo_url }}" width="150px"></td>
         <td>{{ bank.name }}</td>
         <td>{{ bank.url }}</td>
         <td>{{ bank.created }}</td>

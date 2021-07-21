@@ -1,6 +1,13 @@
 from django.db import models
 from django.db.models import PositiveSmallIntegerField
+from django.templatetags.static import static
+
 from currency import choices
+
+
+def bank_logo_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'uploads/bank_logo/{0}/{1}'.format(instance.id, filename)
 
 
 class Bank(models.Model):
@@ -10,9 +17,15 @@ class Bank(models.Model):
     url = models.URLField()
     original_url = models.URLField()
     number = models.CharField(max_length=30)
+    bank_logo = models.FileField(null=True, blank=True, default=None, upload_to=bank_logo_directory_path)
 
     def __str__(self):
         return f'Bank id: {self.id}'
+
+    def get_logo_url(self):
+        if self.bank_logo:
+            return self.bank_logo.url
+        return static('images/default-bank.png')
 
 
 class Rate(models.Model):

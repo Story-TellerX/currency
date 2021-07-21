@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.templatetags.static import static
 
 
 def user_directory_path(instance, filename):
@@ -18,3 +19,8 @@ class User(AbstractUser):
         null=False,
         unique=True,
     )
+
+    def get_avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+        return static('images/default-user.jpg')

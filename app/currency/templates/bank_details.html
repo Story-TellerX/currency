@@ -24,6 +24,7 @@ th {
   color: white;
 }
 
+
 </style>
 {% endblock extra_styles %}
 
@@ -34,13 +35,15 @@ th {
 
     <tr>
         <th>ID</th>
+        <th>LOGO</th>
         <th>NAME</th>
         <th>URL</th>
         <th>CREATED</th>
         <th>PHONE NUMBER</th>
     </tr>
     <tr>
-        <td>{{ object.id }}</td>
+        <td>{{ bank.id }}</td>
+        <td><img class="img-fluid img-thumbnail" src="{{ bank.get_logo_url }}" width="150px"></td>
         <td>{{ object.name }}</td>
         <td>{{ object.url }}</td>
         <td>{{ object.created }}</td>

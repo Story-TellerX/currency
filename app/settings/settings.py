@@ -44,13 +44,13 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rangefilter',
     'import_export',
+    'active_link',
 
     'currency',
     'accounts',
 
     'django.contrib.admin',
     'django.contrib.auth',
-    # Added comment to display apps
 ]
 
 MIDDLEWARE = [

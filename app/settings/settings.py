@@ -189,6 +189,10 @@ LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 DOMAIN = 'http://127.0.0.1:8000'  # TODO
 
+# STATICFILES_DIRS = [
+#     BASE_DIR / "currency" / "static",
+# ]
+
 try:
     from settings.settings_local import *  # noqa
 except ImportError:

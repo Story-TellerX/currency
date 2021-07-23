@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse  # HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView, View
 
 from currency.tasks import send_email_background
 from currency.utils import generate_password
@@ -193,3 +194,19 @@ class ContactusDetailView(DetailView):
     template_name = 'contactus_details.html'
     # model = ContactUS
     queryset = ContactUs.objects.all()
+
+
+class RateListApi(View):
+    def get(self, request):  # if request.method == 'GET':
+        rates = Rate.objects.all()
+        results = []
+        for rate in rates:
+            results.append({
+                "id": rate.id,
+                "sale": float(rate.sale),
+                "buy": float(rate.buy),
+                "bank": rate.bank_id
+            })
+        # import json
+        # return HttpResponse(json.dumps(results), content_type='application/json')
+        return JsonResponse(results, safe=False)

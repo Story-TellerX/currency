@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from currency.views import IndexTemplateView
+from api.views import RateList, RateListCreate, RateDetails
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,10 @@ urlpatterns = [
     path('__debug__/', include(debug_toolbar.urls)),
     path('auth/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
+
+    path('rates/', RateList.as_view()),
+    path('ratescreate/', RateListCreate.as_view()),
+    path('ratedetails/<int:pk>', RateDetails.as_view()),
 ]
 
 urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))

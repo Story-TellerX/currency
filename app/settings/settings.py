@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'import_export',
     'active_link',
     'crispy_forms',
+    'rest_framework',
 
     'currency',
     'accounts',

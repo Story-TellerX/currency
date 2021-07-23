@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 
+from api.paginators import RatePagination, BankPagination
 from currency.models import Rate, Bank
 from api.serializers import RateSerializer, RateDetailsSerializer, BankSerializer, BankDetailsSerializer
 from rest_framework import generics
@@ -27,6 +28,7 @@ class RateDetails(generics.RetrieveUpdateDestroyAPIView):
 class RateViewSets(viewsets.ModelViewSet):
     queryset = Rate.objects.all()
     # serializer_class = RateSerializer
+    pagination_class = RatePagination
 
     def get_serializer_class(self):
         if 'pk' in self.kwargs:
@@ -37,6 +39,7 @@ class RateViewSets(viewsets.ModelViewSet):
 class BankViewSets(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
     # serializer_class = BankSerializer
+    pagination_class = BankPagination
 
     def get_serializer_class(self):
         if 'pk' in self.kwargs:

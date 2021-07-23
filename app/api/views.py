@@ -1,7 +1,12 @@
+from rest_framework.response import Response
+
 from currency.models import Rate, Bank
 from api.serializers import RateSerializer, RateDetailsSerializer, BankSerializer, BankDetailsSerializer
 from rest_framework import generics
 from rest_framework import viewsets
+from rest_framework.views import APIView
+
+from currency import choices
 
 
 class RateList(generics.ListAPIView, generics.CreateAPIView):
@@ -37,3 +42,10 @@ class BankViewSets(viewsets.ModelViewSet):
         if 'pk' in self.kwargs:
             return BankDetailsSerializer
         return BankSerializer
+
+
+class RateTypeChoicesView(APIView):
+    def get(self, request, format=None):  # noqa
+        # return a list of all users
+        # usernames = [user.username in User.objects.all()]
+        return Response(choices.RATE_TYPE_CHOICES)

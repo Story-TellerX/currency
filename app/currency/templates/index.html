@@ -3,22 +3,85 @@
 
 {% block main_content %}
 <!--    <a href="/currency/rate/list/">Rate List</a>-->
-<h2>
-    <p>
-        <a href="{% url 'currency:hello-world' %}">Hello from Class</a>
-    </p>
-    <p>
-        <a href="{% url 'currency:gen-pass' %}">Gen Pass from utils</a>
-    </p>
-    <p>
-        <a href="{% url 'currency:rate-list' %}">Rate List</a>
-    </p>
-    <p>
-        <a href="{% url 'currency:bank-list' %}">Bank List</a>
-    </p>
-    <p>
-        <a href="{% url 'currency:contactus-list' %}">Contact Us List</a>
-    </p>
-</h2>
+    {% load static %}
+<header id="header" class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="image-container">
+                        <img class="img-fluid" src="{% static '/images/header-logo.png' %}">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+                <div class="col-lg-6">
+                    <div class="text-container">
+                        <h3>We offer a free currencies rates for base currency hruvnya</h3>
+                        <a class="btn btn-primary" href="{% url 'currency:rate-list' %}">Discover</a>
+                    </div> <!-- end of text-container -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+        <div class="services">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Rates &amp; Currencies</h5>
+                                <div class="card-text">Allows you to clarify the exchange rate against the hryvnia in several banks of Ukraine</div>
+                                <a class="btn btn-primary" href="{% url 'currency:rate-list' %}">Go To Rates</a>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-pencil-ruler"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Bank &amp; Phones</h5>
+                                <div class="card-text">Let us find out in which banks we receive information or contact them to clarify details</div>
+                                <a class="btn btn-primary" href="{% url 'currency:bank-list' %}">Go To Banks</a>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Contact Us</h5>
+                                <div class="card-text">You can always contact us and we will receive notifications about your question</div>
+                                <a class="btn btn-primary" href="{% url 'currency:contact-us-create' %}">Contact US</a>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+                                                <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Other</h5>
+                                <div class="card-text">You can see the rest of the available functions implemented in the application.</div>
+                                <a class="btn btn-dark" href="{% url 'currency:hello-world' %}">Hello World</a>
+                                <a class="btn btn-dark" href="{% url 'currency:gen-pass' %}">Gen Password</a>
+                            </div>
+                        </div>
+                        <!-- end of card -->
+
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of services -->
+    </header>
+
 
 {% endblock main_content %}

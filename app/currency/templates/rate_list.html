@@ -1,62 +1,45 @@
 {% extends 'base.html' %}
 
-{% block extra_styles %}
-
-
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
-</style>
-
-{% endblock extra_styles %}
-
 {% block main_content %}
 
 <a href="{% url 'currency:rate-create' %}">Create Rate</a>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>CURRENCY</th>
-        <th>BUY</th>
-        <th>SALE</th>
-        <th>DATE AND TIME OF CREATION</th>
-        <th>SOURCE</th>
-        <th>DETAILS</th>
-        {% if request.user.is_superuser %}
-        <th>EDIT</th>
-        {% endif %}
-    </tr>
-    {% for rate in object_list %}
-    <tr>
-        <td>{{ rate.id }}</td>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">CURRENCY</th>
+            <th scope="col">BUY</th>
+            <th scope="col">SALE</th>
+            <th scope="col">DATE AND TIME OF CREATION</th>
+            <th scope="col">SOURCE</th>
+            <th scope="col">DETAILS</th>
+                    {% if request.user.is_superuser %}
+            <th scope="col">EDIT</th>
+                    {% endif %}
+        </tr>
+    </thead>
+            {% for rate in object_list %}
+    <tbody class="table table-striped">
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ rate.id }}</td>
 <!--        <td>{{ rate.type_curr }}</td>-->
-        <td>{{ rate.get_type_curr_display }}</td>
-        <td>{{ rate.buy }}</td>
-        <td>{{ rate.sale }}</td>
-        <td>{{ rate.created }}</td>
-        <td>{{ rate.bank.name }}</td>
-        <td><a href="{% url 'currency:rate-details' rate.id %}">Details</a></td>
-        {% if request.user.is_superuser %}
-        <td><a href="{% url 'currency:rate-update' rate.id %}">Edit</a></td>
-        {% endif %}
+            <td>{{ rate.get_type_curr_display }}</td>
+            <td>{{ rate.buy }}</td>
+            <td>{{ rate.sale }}</td>
+            <td>{{ rate.created }}</td>
+            <td>{{ rate.bank.name }}</td>
+            <td><a class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}" role="button">Details</a></td>
+<!--                <button type="button" class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}">Details</button>-->
+                {% if request.user.is_superuser %}
+            <td><a class="btn btn-warning" href="{% url 'currency:rate-update' rate.id %}" role="button">Edit</a></td>
+                {% endif %}
 <!--        <td><a href="/currency/rate/update/{{ rate.id }}/">Edit</a></td>-->
-    </tr>
-    {% endfor %}
+        </tr>
+    </tbody>
+            {% endfor %}
 </table>
 
 {% endblock main_content %}

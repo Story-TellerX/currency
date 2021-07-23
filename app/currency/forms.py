@@ -19,8 +19,11 @@ class BankForm(forms.ModelForm):
         model = Bank
         fields = (
             'name',
+            'code_name',
             'url',
+            'original_url',
             'number',
+            'bank_logo',
         )
 
 

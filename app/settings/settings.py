@@ -44,13 +44,14 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rangefilter',
     'import_export',
+    'active_link',
+    'crispy_forms',
 
     'currency',
     'accounts',
 
     'django.contrib.admin',
     'django.contrib.auth',
-    # Added comment to display apps
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / '..' / 'static_content'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -182,12 +186,18 @@ SHELL_PLUS_IMPORTS = [
     'from currency.tasks import parse_privatbank',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 DOMAIN = 'http://127.0.0.1:8000'  # TODO
+
+# STATICFILES_DIRS = [
+#     BASE_DIR / "currency" / "static",
+# ]
 
 try:
     from settings.settings_local import *  # noqa

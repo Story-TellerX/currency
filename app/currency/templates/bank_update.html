@@ -21,18 +21,22 @@ button {
 {% endblock extra_styles %}
 
 {% block main_content %}
-
+{% load crispy_forms_tags %}
+      <div class="container">
+                    <div class="image-container">
+                        <img class="img-fluid rounded-circle" src="{{ bank.get_logo_url }}" width="250px">
+                    </div> <!-- end of image-container -->
 
     instance: {{ form.instance.id }}
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form | crispy }}
         <button type="submit">Update Bank</button>
     </form>
     <p>
 <!--        <a href="/currency/bank/delete/{{ form.instance.id }}/">Delete</a>-->
         <a href="{% url 'currency:bank-delete' object.id %}">Delete</a>
     </p>
-
+      </div>
 {% endblock main_content %}

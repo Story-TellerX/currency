@@ -1,5 +1,5 @@
-from currency.models import Rate
-from api.serializers import RateSerializer
+from currency.models import Rate, Bank
+from api.serializers import RateSerializer, BankSerializer
 from rest_framework import generics
 from rest_framework import viewsets
 
@@ -22,3 +22,8 @@ class RateDetails(generics.RetrieveUpdateDestroyAPIView):
 class RateViewSets(viewsets.ModelViewSet):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
+
+
+class BankViewSets(viewsets.ModelViewSet):
+    queryset = Bank.objects.all()
+    serializer_class = BankSerializer

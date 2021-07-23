@@ -11,12 +11,40 @@ class RateSerializer(serializers.ModelSerializer):
             'type_curr',
             'buy',
             'sale',
+            # 'created',
+            'bank_id',
+        )
+
+
+class RateDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rate
+        fields = (
+            'id',
+            'type_curr',
+            'buy',
+            'sale',
             'created',
             'bank_id',
         )
 
 
 class BankSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Bank
+        fields = (
+            'id',
+            'name',
+            # 'code_name',
+            # 'url',
+            'original_url',
+            'number',
+        )
+
+
+class BankDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bank

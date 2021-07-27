@@ -2,10 +2,10 @@ from rest_framework.response import Response
 
 from api.v1.filters import RateFilter, ContactUsFilter
 from api.v1.paginators import RatePagination, BankPagination
+from api.v1.throttles import AnonUserRateThrottle
 from currency.models import Rate, Bank, ContactUs
 from api.v1.serializers import (
     RateSerializer, RateDetailsSerializer, BankSerializer, ContactUsSerializer, ContactUsDetailsSerializer,
-    BankDetailsSerializer,
 
 )
 from rest_framework import generics, status
@@ -36,7 +36,7 @@ class RateViewSets(viewsets.ModelViewSet):
     queryset = Rate.objects.all().select_related('bank').order_by('-created')
     # serializer_class = RateSerializer
     pagination_class = RatePagination
-
+    throttle_classes = [AnonUserRateThrottle]
     filter_backends = (
         filters.DjangoFilterBackend,
         rest_framework_filters.OrderingFilter,
@@ -54,18 +54,19 @@ class RateViewSets(viewsets.ModelViewSet):
         return RateSerializer
 
 
-# class BankVListView(generics.ListAPIView):
-# I will try to get reverse foreign key
-# before it was used listAPI
-class BankVListView(viewsets.ModelViewSet):
+class BankVListView(generics.ListAPIView):
+    # I will try to get reverse foreign key
+    # before it was used listAPI
+    # class BankVListView(viewsets.ModelViewSet):
     queryset = Bank.objects.all().order_by('id')
     serializer_class = BankSerializer
     pagination_class = BankPagination
+    throttle_classes = [AnonUserRateThrottle]
 
-    def get_serializer_class(self):
-        if 'pk' in self.kwargs:
-            return BankDetailsSerializer
-        return BankSerializer
+    # def get_serializer_class(self):
+    #     if 'pk' in self.kwargs:
+    #         return BankDetailsSerializer
+    #     return BankSerializer
 
 
 class RateTypeChoicesView(APIView):
@@ -78,6 +79,7 @@ class RateTypeChoicesView(APIView):
 class ContactUsViewSets(viewsets.ModelViewSet):
     queryset = ContactUs.objects.all().order_by('id')
     pagination_class = RatePagination
+    throttle_classes = [AnonUserRateThrottle]
 
     filter_backends = (
         filters.DjangoFilterBackend,

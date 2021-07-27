@@ -7,12 +7,13 @@ from api.serializers import (
     RateSerializer, RateDetailsSerializer, BankSerializer, ContactUsSerializer, ContactUsDetailsSerializer,
 
 )  # BankDetailsSerializer
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
 from rest_framework import filters as rest_framework_filters
 from currency import choices
+from currency.tasks import send_email_from_api_background
 
 
 class RateList(generics.ListAPIView, generics.CreateAPIView):
@@ -89,3 +90,19 @@ class ContactUsViewSets(viewsets.ModelViewSet):
         if 'pk' in self.kwargs:
             return ContactUsDetailsSerializer
         return ContactUsSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        data = serializer.data
+        body = f'''
+        From: {data['email_from']}
+        Topic: {data['subject']}
+
+        Message:
+        {data['message']}
+        '''
+        send_email_from_api_background.delay(body)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -65,7 +65,7 @@ class ContactUsSerializer(serializers.ModelSerializer):
             'id',
             'email_from',
             'subject',
-            # 'message',
+            'message',
             # 'created',
         )
 

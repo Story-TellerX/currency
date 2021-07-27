@@ -35,10 +35,16 @@ class RateViewSets(viewsets.ModelViewSet):
     # serializer_class = RateSerializer
     pagination_class = RatePagination
 
-    filter_backends = (filters.DjangoFilterBackend, rest_framework_filters.OrderingFilter)
+    filter_backends = (
+        filters.DjangoFilterBackend,
+        rest_framework_filters.OrderingFilter,
+        rest_framework_filters.SearchFilter,
+    )
     filterset_class = RateFilter
 
-    ordering_fields = ['id', 'created', 'curr_type', "sale", 'buy']
+    ordering_fields = ['id', 'created', 'type_curr', "sale", 'buy']
+
+    search_fields = ['sale', 'buy', '=id', 'created', 'type_curr']
 
     def get_serializer_class(self):
         if 'pk' in self.kwargs:
@@ -68,10 +74,16 @@ class ContactUsViewSets(viewsets.ModelViewSet):
     queryset = ContactUs.objects.all().order_by('id')
     pagination_class = RatePagination
 
-    filter_backends = (filters.DjangoFilterBackend, rest_framework_filters.OrderingFilter)
+    filter_backends = (
+        filters.DjangoFilterBackend,
+        rest_framework_filters.OrderingFilter,
+        rest_framework_filters.SearchFilter,
+    )
     filterset_class = ContactUsFilter
 
-    ordering_fields = ['id', 'created', 'email_from', "subject", 'message']
+    ordering_fields = ['id', 'created', 'email_from', 'subject', 'message']
+
+    search_fields = ['=id', 'created', 'email_from', '^subject', 'message']
 
     def get_serializer_class(self):
         if 'pk' in self.kwargs:

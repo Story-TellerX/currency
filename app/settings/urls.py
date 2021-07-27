@@ -28,7 +28,7 @@ urlpatterns = [
     path('__debug__/', include(debug_toolbar.urls)),
     path('auth/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
-    path('api/', include('api.urls')),
+    path('api/v1/', include('api.v1.urls')),
 
     # path('rates/', RateList.as_view()),
     # path('ratescreate/', RateListCreate.as_view()),

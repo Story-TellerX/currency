@@ -1,12 +1,13 @@
 from rest_framework.response import Response
 
-from api.filters import RateFilter, ContactUsFilter
-from api.paginators import RatePagination, BankPagination
+from api.v1.filters import RateFilter, ContactUsFilter
+from api.v1.paginators import RatePagination, BankPagination
 from currency.models import Rate, Bank, ContactUs
-from api.serializers import (
+from api.v1.serializers import (
     RateSerializer, RateDetailsSerializer, BankSerializer, ContactUsSerializer, ContactUsDetailsSerializer,
+    BankDetailsSerializer,
 
-)  # BankDetailsSerializer
+)
 from rest_framework import generics, status
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -32,7 +33,7 @@ class RateDetails(generics.RetrieveUpdateDestroyAPIView):
 
 
 class RateViewSets(viewsets.ModelViewSet):
-    queryset = Rate.objects.all().order_by('-created')
+    queryset = Rate.objects.all().select_related('bank').order_by('-created')
     # serializer_class = RateSerializer
     pagination_class = RatePagination
 
@@ -53,15 +54,18 @@ class RateViewSets(viewsets.ModelViewSet):
         return RateSerializer
 
 
-class BankVListView(generics.ListAPIView):
+# class BankVListView(generics.ListAPIView):
+# I will try to get reverse foreign key
+# before it was used listAPI
+class BankVListView(viewsets.ModelViewSet):
     queryset = Bank.objects.all().order_by('id')
     serializer_class = BankSerializer
     pagination_class = BankPagination
 
-    # def get_serializer_class(self):
-    #     if 'pk' in self.kwargs:
-    #         return BankDetailsSerializer
-    #     return BankSerializer
+    def get_serializer_class(self):
+        if 'pk' in self.kwargs:
+            return BankDetailsSerializer
+        return BankSerializer
 
 
 class RateTypeChoicesView(APIView):

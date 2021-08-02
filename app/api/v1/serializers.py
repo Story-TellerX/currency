@@ -51,19 +51,20 @@ class RateDetailsSerializer(serializers.ModelSerializer):
         )
 
 
-# class BankDetailsSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = Bank
-#         fields = (
-#             'id',
-#             'name',
-#             'code_name',
-#             'url',
-#             'original_url',
-#             'number',
-#             # 'rate_object',
-#         )
+class BankDetailsSerializer(serializers.ModelSerializer):
+    rates = RateSerializer(many=True)
+
+    class Meta:
+        model = Bank
+        fields = (
+            'id',
+            'name',
+            'code_name',
+            'url',
+            'original_url',
+            'number',
+            'rates',
+        )
 
 
 class ContactUsSerializer(serializers.ModelSerializer):

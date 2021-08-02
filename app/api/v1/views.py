@@ -6,7 +6,7 @@ from api.v1.throttles import AnonUserRateThrottle
 from currency.models import Rate, Bank, ContactUs
 from api.v1.serializers import (
     RateSerializer, RateDetailsSerializer, BankSerializer, ContactUsSerializer, ContactUsDetailsSerializer,
-
+    BankDetailsSerializer,
 )
 from rest_framework import generics  # status
 from rest_framework import viewsets
@@ -67,6 +67,16 @@ class BankVListView(generics.ListAPIView):
     #     if 'pk' in self.kwargs:
     #         return BankDetailsSerializer
     #     return BankSerializer
+
+
+class BankVDetailsView(generics.RetrieveAPIView):
+    # I will try to get reverse foreign key
+    # before it was used listAPI
+    # class BankVListView(viewsets.ModelViewSet):
+    queryset = Bank.objects.all().prefetch_related('rates').order_by('id')
+    serializer_class = BankDetailsSerializer
+    pagination_class = BankPagination
+    throttle_classes = [AnonUserRateThrottle]
 
 
 class RateTypeChoicesView(APIView):

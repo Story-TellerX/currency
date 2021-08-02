@@ -39,6 +39,7 @@ class Rate(models.Model):
         on_delete=models.CASCADE,
         null=True,
         default=None,
+        related_name='rates'
     )
 
     # bank = models.ForeignKey('currency.Bank')

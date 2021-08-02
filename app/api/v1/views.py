@@ -8,7 +8,7 @@ from api.v1.serializers import (
     RateSerializer, RateDetailsSerializer, BankSerializer, ContactUsSerializer, ContactUsDetailsSerializer,
 
 )
-from rest_framework import generics, status
+from rest_framework import generics  # status
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters

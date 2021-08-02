@@ -247,6 +247,22 @@ def send_email_background(body):
     )
 
 
+@shared_task(
+    autoretry_for=(Exception,),
+    retry_kwargs={
+        'max_retries': 5,
+    }
+)
+def send_email_from_api_background(body):
+    send_mail(
+        'New Contact Us form is created by api',
+        body,
+        'testtestapp454545@gmail.com',
+        ['ds_ch@i.ua'],
+        fail_silently=False,
+    )
+
+
 @shared_task()
 def print_hello_world_beat():
     print('BEAT')  # noqa

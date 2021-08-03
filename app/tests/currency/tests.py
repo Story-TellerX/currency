@@ -84,3 +84,21 @@ def test_create_rate_success(client):
     assert response.status_code == 302
     assert response.url == '/currency/rate/list/'
     assert Rate.objects.count() == rates_initial_counts + 1
+
+
+def test_create_contactus(client, mailoutbox):
+    form_data = {
+        'email_from': 'test@test.com',
+        'subject': "Topic fro subject",
+        'message': 'Message'
+    }
+    response = client.post('/currency/contact-us/create/', data=form_data)
+    assert response.status_code == 302
+    assert response.url == '/currency/contactus/list/'
+    assert len(mailoutbox) == 1
+    mail = mailoutbox[0]
+    assert mail.to == ['test@test.com']
+    assert mail.cc == []
+    assert mail.bcc == []
+    assert mail.reply_to == []
+    # assert mail.from_email == settings.EMAIL_HOST_USER

@@ -6,3 +6,4 @@ install:
 script:
   - flake8 ./app
   - pytest app/tests -s -vvv --cov=app --cov-report html && coverage report --fail-under=50
+  - python app/manage.py makemigrations --check --dry-run

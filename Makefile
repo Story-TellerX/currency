@@ -45,4 +45,7 @@ beat:
 	cd app && celery -A settings beat -l info
 
 pytest:
-	pytest app/tests -s -vvv
+	pytest app/tests -s -vvv --cov=app --cov-report html && coverage report --fail-under=50
+
+show-coverage:  ## open coverage HTML report in default browser
+	python3 -c "import webbrowser; webbrowser.open('.pytest_cache/coverage/index.html')"

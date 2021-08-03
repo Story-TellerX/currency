@@ -88,7 +88,7 @@ def test_create_rate_success(client):
 
 def test_create_contactus(client, mailoutbox):
     form_data = {
-        'email_from': 'test@test.com',
+        'email_from': 'ds_ch@i.ua',
         'subject': "Topic fro subject",
         'message': 'Message'
     }
@@ -97,7 +97,7 @@ def test_create_contactus(client, mailoutbox):
     assert response.url == '/currency/contactus/list/'
     assert len(mailoutbox) == 1
     mail = mailoutbox[0]
-    assert mail.to == ['test@test.com']
+    assert mail.to == ['ds_ch@i.ua']
     assert mail.cc == []
     assert mail.bcc == []
     assert mail.reply_to == []

@@ -87,9 +87,10 @@ def test_create_rate_success(client):
 
 
 @pytest.mark.skip('TODO not passed on CI')
-def test_create_contactus(client, mailoutbox):
+def test_create_contactus(client, mailoutbox, settings, fake):
+    email_from = fake.email()
     form_data = {
-        'email_from': 'ds_ch@i.ua',
+        'email_from': email_from,
         'subject': "Topic fro subject",
         'message': 'Message'
     }

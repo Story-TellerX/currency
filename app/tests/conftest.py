@@ -55,7 +55,7 @@ def bank(enable_db_access_for_all_tests):
 
 
 @pytest.fixture()
-def test_rate_create_as_fixtures(client_api_auth, bank):
+def rate_create_as_fixtures(client_api_auth, bank):
     from currency import choices
     data = {
         'buy': 20,

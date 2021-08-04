@@ -40,7 +40,7 @@ def test_rates_create_success(client_api_auth, bank):
     }
 
 
-def test_rates_update_invalid(client_api_auth, bank, test_rate_create_as_fixtures):
+def test_rates_update_invalid(client_api_auth, bank, rate_create_as_fixtures):
     data_update = {
         'buy': "25",
         'sale': 30,
@@ -52,7 +52,7 @@ def test_rates_update_invalid(client_api_auth, bank, test_rate_create_as_fixture
     assert response.json() == {'bank': ['Invalid pk "99999" - object does not exist.']}
 
 
-def test_rates_update_success(client_api_auth, bank, test_rate_create_as_fixtures):
+def test_rates_update_success(client_api_auth, bank, rate_create_as_fixtures):
     data_update = {
         'buy': 25,
         'sale': 30,
@@ -74,7 +74,7 @@ def test_rates_update_success(client_api_auth, bank, test_rate_create_as_fixture
     }
 
 
-def test_rates_delete(client_api_auth):
+def test_rates_delete(client_api_auth, rate_create_as_fixtures):
     rates_initial_counts = Rate.objects.count()
     response = client_api_auth.delete('/api/v1/rates/1/')
     assert response.status_code == 204

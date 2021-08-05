@@ -44,12 +44,12 @@ def test_rates_update_invalid(client_api_auth, bank, rate_create_as_fixtures):
     data_update = {
         'buy': "25",
         'sale': 30,
-        'type_curr': choices.RATE_TYPE_EUR,
+        'type_curr': 5,
         'bank': 99999,
     }
-    response = client_api_auth.post('/api/v1/rates/', data=data_update)
+    response = client_api_auth.patch('/api/v1/rates/1/', data=data_update)
     assert response.status_code == 400
-    assert response.json() == {'bank': ['Invalid pk "99999" - object does not exist.']}
+    assert response.json() == {'type_curr': ['"5" is not a valid choice.']}
 
 
 def test_rates_update_success(client_api_auth, bank, rate_create_as_fixtures):
@@ -59,18 +59,15 @@ def test_rates_update_success(client_api_auth, bank, rate_create_as_fixtures):
         'type_curr': choices.RATE_TYPE_EUR,
         'bank': bank.id,
     }
-    response = client_api_auth.post('/api/v1/rates/', data=data_update)
-    assert response.status_code == 201
+    response = client_api_auth.patch('/api/v1/rates/1/', data=data_update)
+    assert response.status_code == 200
     assert response.json() == {
-        'id': 2,
+        'id': 1,
         'type_curr': 1,
         'buy': '25.00',
         'sale': '30.00',
-        'bank_object': {'id': 6,
-                        'name': 'SkyBank',
-                        'original_url': 'https://tascombank.ua/',
-                        'number': '0 (800) 503 580'
-                        }
+        'created': f'{response.json()["created"]}',
+        'bank_id': 6
     }
 
 

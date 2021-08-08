@@ -74,7 +74,7 @@ class Command(BaseCommand):
         bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
         rate_dates_in_db = Rate.objects.filter(bank=bank).order_by('rate_dates').last()
         url_date_for_insert = self.get_date_for_parsing()
-        while rate_dates_in_db.rate_dates != yesterday:
+        while rate_dates_in_db is None or rate_dates_in_db.rate_dates != yesterday:
             for url in url_date_for_insert:
                 self.parse_privatbank_archive(url)
                 time.sleep(10)

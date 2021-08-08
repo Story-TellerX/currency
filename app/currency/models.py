@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from django.db.models import PositiveSmallIntegerField
 from django.templatetags.static import static
@@ -34,6 +36,10 @@ class Rate(models.Model):
     sale = models.DecimalField(max_digits=5, decimal_places=2)
     buy = models.DecimalField(max_digits=5, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
+    rate_date = models.DateField(
+        default=date.today,
+        editable=True
+    )
     bank = models.ForeignKey(
         Bank,
         on_delete=models.CASCADE,

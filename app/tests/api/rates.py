@@ -63,7 +63,7 @@ def test_rates_update_success(client_api_auth, bank, rate_create_as_fixtures):
     assert response.status_code == 200
     assert response.json() == {
         'id': 1,
-        'type_curr': 1,
+        'type_curr': choices.RATE_TYPE_EUR,
         'buy': '25.00',
         'sale': '30.00',
         'created': f'{response.json()["created"]}',

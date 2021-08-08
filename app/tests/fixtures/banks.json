@@ -1,0 +1,74 @@
+[
+  {
+    "model": "currency.bank",
+    "pk": 1,
+    "fields": {
+      "name": "PrivatBank",
+      "code_name": "privatbank",
+      "url": "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5",
+      "original_url": "https://privatbank.ua/ru",
+      "number": "3700",
+      "bank_logo": "uploads/bank_logo/1/privatbank.png"
+    }
+  },
+  {
+    "model": "currency.bank",
+    "pk": 2,
+    "fields": {
+      "name": "MonoBank",
+      "code_name": "monobank",
+      "url": "https://api.monobank.ua/bank/currency",
+      "original_url": "https://www.monobank.ua/",
+      "number": "0 800 205 205",
+      "bank_logo": "uploads/bank_logo/2/logoMono-1.jpg"
+    }
+  },
+  {
+    "model": "currency.bank",
+    "pk": 3,
+    "fields": {
+      "name": "Vkurse",
+      "code_name": "vkurse",
+      "url": "http://vkurse.dp.ua/course.json",
+      "original_url": "http://vkurse.dp.ua/",
+      "number": "+38(067)989-22-95",
+      "bank_logo": ""
+    }
+  },
+  {
+    "model": "currency.bank",
+    "pk": 4,
+    "fields": {
+      "name": "IBoxBank",
+      "code_name": "iboxbank",
+      "url": "https://app.iboxbank.online/api/currency/rate-only-base/UAH",
+      "original_url": "https://iboxbank.online/ua/",
+      "number": "0 (800) 500-178",
+      "bank_logo": ""
+    }
+  },
+  {
+    "model": "currency.bank",
+    "pk": 5,
+    "fields": {
+      "name": "GrantBank",
+      "code_name": "grantbank",
+      "url": "https://ws.grant.ua/api/rates",
+      "original_url": "https://www.grant.ua/ua/home/",
+      "number": "+38(057)714-01-99",
+      "bank_logo": ""
+    }
+  },
+  {
+    "model": "currency.bank",
+    "pk": 6,
+    "fields": {
+      "name": "SkyBank",
+      "code_name": "skybank",
+      "url": "https://tascombank.ua/api/currencies",
+      "original_url": "https://tascombank.ua/",
+      "number": "0 (800) 503 580",
+      "bank_logo": ""
+    }
+  }
+]

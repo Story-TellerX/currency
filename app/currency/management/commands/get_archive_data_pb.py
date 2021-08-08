@@ -17,7 +17,8 @@ class Command(BaseCommand):
         for x in range(0, (end - start).days):
             date_generated_for_interval.append(start + datetime.timedelta(days=x))
         for date in date_generated_for_interval:
-            url_date_for_insert.append('https://api.privatbank.ua/p24api/exchange_rates?json&date=' + ''.join(date.strftime("%d.%m.%Y")))
+            url_date_for_insert.append('https://api.privatbank.ua/p24api/'
+                                       'exchange_rates?json&date=' + ''.join(date.strftime("%d.%m.%Y")))
         return url_date_for_insert
 
         # FIRST TRY TO GET INTERVAL OF DATES
@@ -34,5 +35,3 @@ class Command(BaseCommand):
         #         datetime.date(year, month, day).strftime('%d.%m.%Y')  # get date for month in year with days
         #         #  formating output for url in parser
         #     )
-
-

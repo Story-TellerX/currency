@@ -23,12 +23,12 @@ class Command(BaseCommand):
         for x in range(0, (end - start).days):
             date_generated_for_interval.append(start + datetime.timedelta(days=x))
         for date in date_generated_for_interval:
-            url_date_for_insert.append('https://api.privatbank.ua/p24api/'
-                                       'exchange_rates?json&date=' + ''.join(date.strftime('%d.%m.%Y')))
+            url_date_for_insert.append(date.strftime('%d.%m.%Y'))
         return url_date_for_insert
 
     def get_privat_archive_currencies(self, url_date_for_insert):
-        response = requests.get(url_date_for_insert)
+        payload = {'json': '', 'date': url_date_for_insert}
+        response = requests.get('https://api.privatbank.ua/p24api/exchange_rates', params=payload)
         response.raise_for_status()
         currencies = response.json()
         return currencies

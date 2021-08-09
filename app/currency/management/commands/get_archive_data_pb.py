@@ -83,14 +83,15 @@ class Command(BaseCommand):
         bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
         rate_dates_in_db = Rate.objects.filter(bank=bank).order_by('created').last()
         url_date_for_insert = self.get_date_for_parsing()
+        urls = list(url_date_for_insert)
         while rate_dates_in_db is None or rate_dates_in_db.created.date() != yesterday:
             # If Rate does not exist in DB should be created, because queryset return None
             # while should be proceeding from initial date to yesterdays
             # yesterday date is taken from last record in db
-            for urls in url_date_for_insert:
+            for url in urls:
                 # for url in urls:
                 try:
-                    self.parse_privatbank_archive(urls)
+                    self.parse_privatbank_archive(url)
                     time.sleep(10)
                 except HTTPError:
                     continue

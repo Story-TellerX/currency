@@ -2,16 +2,19 @@ import time
 
 import requests
 from django.core.management.base import BaseCommand
+
 import datetime
 
 from currency import consts, choices
 from currency.utils import to_decimal
+from django.http import Http404
 
 
 class Command(BaseCommand):
     help = 'Parsing archive data of rates from PrivatBank API'  # noqa
 
     def get_date_for_parsing(self):
+        import datetime
         current_date = str(datetime.date.today().strftime('%d.%m.%Y'))
         start = datetime.datetime.strptime('01.01.2015', '%d.%m.%Y')
         end = datetime.datetime.today().strptime(current_date, '%d.%m.%Y')
@@ -32,6 +35,7 @@ class Command(BaseCommand):
 
     def parse_privatbank_archive(self, url):
         from currency.models import Rate, Bank
+        from datetime import datetime
 
         currencies = self.get_privat_archive_currencies(url)
 
@@ -47,37 +51,46 @@ class Command(BaseCommand):
         for curr in currencies_data:
             currencies_type = curr['currency']
             if currencies_type in available_currencies_types:
-                currencies_type = available_currencies_types[curr['currency']]
-                buy = to_decimal(curr['purchaseRate'])
-                sale = to_decimal(curr['saleRate'])
-                rate_date_string = currencies['date']
-                rate_date = datetime.datetime.strptime(rate_date_string, '%d.%m.%Y').date()
+                try:
+                    currencies_type = available_currencies_types[curr['currency']]
+                    buy = to_decimal(curr['purchaseRate'])
+                    sale = to_decimal(curr['saleRate'])
+                    rate_date_string = currencies['date']
+                    rate_date = datetime.strptime(rate_date_string, '%d.%m.%Y').date()
 
-                previous_rate = Rate.objects.filter(bank=bank, type_curr=currencies_type).order_by('rate_dates').last()
+                    previous_rate = Rate.objects.filter(bank=bank, type_curr=currencies_type).order_by('created').last()
 
-                if previous_rate is None or \
-                        previous_rate.sale != sale or \
-                        previous_rate.buy != buy or \
-                        previous_rate.rate_dates != rate_date:
-                    Rate.objects.create(
-                        type_curr=currencies_type,
-                        sale=sale,
-                        buy=buy,
-                        bank=bank,
-                        rate_dates=rate_date,
-                    )
+                    if previous_rate is None or \
+                            previous_rate.sale != sale or \
+                            previous_rate.buy != buy or \
+                            previous_rate.created.date() != rate_date:
+                        Rate.objects.create(
+                            type_curr=currencies_type,
+                            sale=sale,
+                            buy=buy,
+                            bank=bank,
+                            created=datetime.combine(rate_date, datetime.min.time())
+                        )
+                except KeyError:
+                    continue
 
     def handle(self, *args, **options):
         from currency.models import Rate, Bank
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
         bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
-        rate_dates_in_db = Rate.objects.filter(bank=bank).order_by('rate_dates').last()
+        rate_dates_in_db = Rate.objects.filter(bank=bank).order_by('created').last()
         url_date_for_insert = self.get_date_for_parsing()
-        while rate_dates_in_db is None or rate_dates_in_db.rate_dates != yesterday:
+        while rate_dates_in_db is None or rate_dates_in_db.created.date() != yesterday:
+            # If Rate does not exist in DB should be created, because queryset return None
+            # while should be proceeding from initial date to yesterdays
+            # yesterday date is taken from last record in db
             for url in url_date_for_insert:
-                self.parse_privatbank_archive(url)
-                time.sleep(10)
+                try:
+                    self.parse_privatbank_archive(url)
+                    time.sleep(10)
+                except Http404:
+                    continue
 
         # FIRST TRY TO GET INTERVAL OF DATES
         # initial_date = ('201412')

@@ -228,3 +228,25 @@
 #     from currency.models import Rate
 #     rate = Rate.objects.get(id=rate_id)
 #     print(f'Got Rate with id: {rate.id}')
+
+# TODO create custom command to override codename
+# b = Bank.objects.get(name='MonoBank')
+# b.code_name
+# b.code_name = 'monobank'
+# b.save()
+# b = Bank.objects.get(name='Vkurse')
+# b.code_name
+# b.code_name = 'vkurse'
+# b.save()
+# b = Bank.objects.get(name='IBoxBank')
+# b.code_name
+# b.code_name = 'iboxbank'
+# b.save()
+# b = Bank.objects.get(name='GrantBank')
+# b.code_name
+# b.code_name = 'grantbank'
+# b.save()
+# b = Bank.objects.get(name='SkyBank')
+# b.code_name
+# b.code_name = 'skybank'
+# b.save()

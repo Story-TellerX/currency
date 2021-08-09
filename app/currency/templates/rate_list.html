@@ -13,7 +13,6 @@
             <th scope="col">BUY</th>
             <th scope="col">SALE</th>
             <th scope="col">DATE AND TIME OF CREATION</th>
-            <th scope="col">DATE FOR RATE OF CURRENCY</th>
             <th scope="col">SOURCE</th>
             <th scope="col">DETAILS</th>
                     {% if request.user.is_superuser %}
@@ -31,7 +30,6 @@
             <td>{{ rate.buy }}</td>
             <td>{{ rate.sale }}</td>
             <td>{{ rate.created }}</td>
-            <td>{{ rate.rate_dates }}</td>
             <td>{{ rate.bank.name }}</td>
             <td><a class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}" role="button">Details</a></td>
 <!--                <button type="button" class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}">Details</button>-->

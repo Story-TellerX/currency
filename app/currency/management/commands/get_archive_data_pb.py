@@ -5,9 +5,10 @@ from django.core.management.base import BaseCommand
 
 import datetime
 
+from requests import HTTPError
+
 from currency import consts, choices
 from currency.utils import to_decimal
-from django.http import Http404
 
 
 class Command(BaseCommand):
@@ -18,12 +19,13 @@ class Command(BaseCommand):
         current_date = str(datetime.date.today().strftime('%d.%m.%Y'))
         start = datetime.datetime.strptime('01.01.2015', '%d.%m.%Y')
         end = datetime.datetime.today().strptime(current_date, '%d.%m.%Y')
-        date_generated_for_interval = []
-        url_date_for_insert = []
-        for x in range(0, (end - start).days):
-            date_generated_for_interval.append(start + datetime.timedelta(days=x))
-        for date in date_generated_for_interval:
-            url_date_for_insert.append(date.strftime('%d.%m.%Y'))
+        date_generated_for_interval = [start + datetime.timedelta(days=x) for x in range((end-start).days + 1)]
+        url_date_for_insert = [date.strftime('%d.%m.%Y') for date in date_generated_for_interval]
+        # for x in range(0, (end - start).days):
+        #     date_generated_for_interval.append(start + datetime.timedelta(days=x))
+        # url_date_for_insert = []
+        # for date in date_generated_for_interval:
+        #     # url_date_for_insert.append(date.strftime('%d.%m.%Y'))
         return url_date_for_insert
 
     def get_privat_archive_currencies(self, url_date_for_insert):
@@ -85,11 +87,12 @@ class Command(BaseCommand):
             # If Rate does not exist in DB should be created, because queryset return None
             # while should be proceeding from initial date to yesterdays
             # yesterday date is taken from last record in db
-            for url in url_date_for_insert:
+            for urls in url_date_for_insert:
+                # for url in urls:
                 try:
-                    self.parse_privatbank_archive(url)
+                    self.parse_privatbank_archive(urls)
                     time.sleep(10)
-                except Http404:
+                except HTTPError:
                     continue
 
         # FIRST TRY TO GET INTERVAL OF DATES

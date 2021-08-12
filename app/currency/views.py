@@ -9,7 +9,7 @@ from currency.tasks import send_email_background
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
 from currency.forms import RateForm, BankForm, ContactUsForm
-from currency import choices
+from currency import choices, consts
 
 
 class IndexTemplateView(TemplateView):
@@ -40,10 +40,14 @@ class RateListView(ListView):
 
 
 def get_latest_rate():
-    cache_key = 'latest::rates'
+    # cache_key = consts.CACHE_KEY_LATEST_RATES
 
-    if cache_key in cache:
-        return cache.get(cache_key)
+    # if cache_key in cache:
+    #     return cache.get(cache_key)
+
+    if consts.CACHE_KEY_LATEST_RATES in cache:
+        return cache.get(consts.CACHE_KEY_LATEST_RATES)
+
     object_list = []  # context['object_list'] = []
 
     for bank in Bank.objects.all():
@@ -52,7 +56,7 @@ def get_latest_rate():
             if latest_rate is not None:
                 object_list.append(latest_rate)
 
-    cache.set(cache_key, object_list, 60 * 60 * 15)
+    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 15)
     return object_list
 
 

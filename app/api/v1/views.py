@@ -15,17 +15,18 @@ from django_filters import rest_framework as filters
 from rest_framework import filters as rest_framework_filters
 from currency import choices
 from currency.tasks import send_email_from_api_background
-# from currency.views import get_latest_rate
+from currency.views import get_latest_rate
 
 
 class RateList(generics.ListAPIView):  # generics.CreateAPIView
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
 
+
 # TODO cache for API DRF
-# class LatestRates(generics.ListAPIView):
-#     queryset = get_latest_rate()
-#     serializer_class = RateSerializer
+class LatestRates(generics.ListAPIView):
+    queryset = get_latest_rate()
+    serializer_class = RateSerializer
 
 
 class RateListCreate(generics.ListCreateAPIView):

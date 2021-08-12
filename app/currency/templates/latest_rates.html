@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
+{% load cache %}
+
 {% block main_content %}
 
+{% cache 500 latest_rates %}
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
@@ -29,5 +32,6 @@
     </tbody>
             {% endfor %}
 </table>
+{% endcache %}
 
 {% endblock main_content %}

@@ -3,7 +3,7 @@ from currency.views import (
     GenPassword, HelloWorld,
     ContactusListView, ContactusDetailView, CreateContactUs,
     BankListView, BankCreateView, BankDetailView, BankUpdateView, BankDeleteView,
-    RateListView, RateCreateView, RateDetailView, RateUpdateView, RateDeleteView,
+    RateListView, RateCreateView, RateDetailView, RateUpdateView, RateDeleteView, LatestRatesView,
 )  # RateListApi
 
 app_name = 'currency'
@@ -15,6 +15,7 @@ urlpatterns = [
     # path('api/rates/', RateListApi.as_view()),
 
     path('rate/list/', RateListView.as_view(), name="rate-list"),
+    path('rate/latest/', LatestRatesView.as_view(), name="latest-rates"),
     path('rate/details/<int:pk>/', RateDetailView.as_view(), name="rate-details"),
     path('rate/create/', RateCreateView.as_view(), name="rate-create"),
     path('rate/update/<int:pk>/', RateUpdateView.as_view(), name="rate-update"),

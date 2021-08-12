@@ -15,6 +15,9 @@
 <!--                /*<span class="sr-only">(current)</span>*/-->
             </li>
             <li class="nav-item">
+                <a class="nav-link text-light {% active_link 'currency:latest-rates' %}" href="{% url 'currency:latest-rates' %}">Latest Rate</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-light {% active_link 'currency:rate-list' %}" href="{% url 'currency:rate-list' %}">Rate List</a>
             </li>
             <li class="nav-item">

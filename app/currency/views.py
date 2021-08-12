@@ -52,7 +52,7 @@ def get_latest_rate():
             if latest_rate is not None:
                 object_list.append(latest_rate)
 
-    cache.set(cache_key, object_list, 15)
+    cache.set(cache_key, object_list, 60 * 60 * 15)
     return object_list
 
 

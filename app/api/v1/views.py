@@ -15,10 +15,16 @@ from django_filters import rest_framework as filters
 from rest_framework import filters as rest_framework_filters
 from currency import choices
 from currency.tasks import send_email_from_api_background
+from currency.views import get_latest_rate
 
 
 class RateList(generics.ListAPIView):  # generics.CreateAPIView
     queryset = Rate.objects.all()
+    serializer_class = RateSerializer
+
+
+class LatestRates(generics.ListAPIView):
+    queryset = (get_latest_rate())
     serializer_class = RateSerializer
 
 
@@ -73,6 +79,7 @@ class BankVDetailsView(generics.RetrieveAPIView):
     # I will try to get reverse foreign key
     # before it was used listAPI
     # class BankVListView(viewsets.ModelViewSet):
+    # DONE
     queryset = Bank.objects.all().prefetch_related('rates').order_by('id')
     serializer_class = BankDetailsSerializer
     pagination_class = BankPagination

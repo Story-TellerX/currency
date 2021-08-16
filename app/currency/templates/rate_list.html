@@ -5,43 +5,50 @@
 
 <a href="{% url 'currency:rate-create' %}">Create Rate</a>
 
-<table class="table table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">ID</th>
-            <th scope="col">CURRENCY</th>
-            <th scope="col">BUY</th>
-            <th scope="col">SALE</th>
-            <th scope="col">DATE AND TIME OF CREATION</th>
-            <th scope="col">SOURCE</th>
-            <th scope="col">DETAILS</th>
-                    {% if request.user.is_superuser %}
-            <th scope="col">EDIT</th>
-                    {% endif %}
-        </tr>
-    </thead>
-            {% for rate in object_list %}
-    <tbody class="table table-striped">
-        <tr>
-            <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ rate.id }}</td>
-<!--        <td>{{ rate.type_curr }}</td>-->
-            <td>{{ rate.get_type_curr_display }}</td>
-            <td>{{ rate.buy }}</td>
-            <td>{{ rate.sale }}</td>
-            <td>{{ rate.created }}</td>
-            <td>{{ rate.bank.name }}</td>
-            <td><a class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}" role="button">Details</a></td>
-<!--                <button type="button" class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}">Details</button>-->
+    <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span> Apply Filters
+        </button>
+    </form>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">CURRENCY</th>
+                <th scope="col">BUY</th>
+                <th scope="col">SALE</th>
+                <th scope="col">DATE AND TIME OF CREATION</th>
+                <th scope="col">SOURCE</th>
+                <th scope="col">DETAILS</th>
                 {% if request.user.is_superuser %}
-            <td><a class="btn btn-warning" href="{% url 'currency:rate-update' rate.id %}" role="button">Edit</a></td>
+                <th scope="col">EDIT</th>
                 {% endif %}
-<!--        <td><a href="/currency/rate/update/{{ rate.id }}/">Edit</a></td>-->
-        </tr>
-    </tbody>
-            {% endfor %}
-</table>
+            </tr>
+        </thead>
+        {% for rate in object_list %}
+        <tbody class="table table-striped">
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ rate.id }}</td>
+                <!--        <td>{{ rate.type_curr }}</td>-->
+                <td>{{ rate.get_type_curr_display }}</td>
+                <td>{{ rate.buy }}</td>
+                <td>{{ rate.sale }}</td>
+                <td>{{ rate.created }}</td>
+                <td>{{ rate.bank.name }}</td>
+                <td><a class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}" role="button">Details</a></td>
+                <!--                <button type="button" class="btn btn-info" href="{% url 'currency:rate-details' rate.id %}">Details</button>-->
+                {% if request.user.is_superuser %}
+                <td><a class="btn btn-warning" href="{% url 'currency:rate-update' rate.id %}" role="button">Edit</a></td>
+                {% endif %}
+                <!--        <td><a href="/currency/rate/update/{{ rate.id }}/">Edit</a></td>-->
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
 <!--django basic pagination-->
 <!--<div class="pagination">-->
 <!--    <span class="step-links">-->
@@ -83,7 +90,7 @@
 <!--  </ul>-->
 
     {% if is_paginated %}
-      {% pagination page_obj %}
+        {% pagination page_obj %}
     {% endif %}
 
 

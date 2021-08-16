@@ -36,7 +36,8 @@ class HelloWorld(TemplateView):
 
 class RateListView(ListView):
     template_name = 'rate_list.html'
-    queryset = Rate.objects.all().select_related('bank')
+    queryset = Rate.objects.all().select_related('bank').order_by('id')
+    paginate_by = 10
 
 
 def get_latest_rate():
@@ -56,7 +57,7 @@ def get_latest_rate():
             if latest_rate is not None:
                 object_list.append(latest_rate)
 
-    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 15)
+    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 8)
     return object_list
 
 

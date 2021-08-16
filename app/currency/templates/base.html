@@ -26,7 +26,20 @@
 {% block main_content %}
 {% endblock main_content %}
 
-{% include 'includes/footer.html' %}
+<!--{% include 'includes/footer.html' %}-->
+<nav class="navbar fixed-bottom navbar-dark bg-primary">
+  <a class="navbar-brand">Currencies exchange rates based on the Python Django</a>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <a class="btn btn-warning" href="#" role="button">Search</a>
+    {% if request.user.is_authenticated %}
+      <a class="btn btn-light" href="{v% url 'accounts:my-profile' %}" role="button">My Profile</a>
+    {% else %}
+      <a class="btn btn-light" href="{% url 'accounts:signup' %}" role="button">Sign Up</a>
+    {% endif %}
+  </form>
+</nav>
+
 
 <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"-->
 <!--        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->

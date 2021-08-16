@@ -20,6 +20,9 @@ gen_data_contactus:
 gen_data_bank:
 	$(manage_py) gen_data_bank
 
+parse_archive:
+	$(manage_py) get_archive_data_pb
+
 lint:
 	$ flake8 app/
 

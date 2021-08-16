@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 import requests
 from currency.utils import to_decimal
 from currency import choices, consts
+from django.core.cache import cache
 
 
 def _get_privat_and_mono_currencies(url):
@@ -24,6 +25,8 @@ def parse_privatbank():
         'EUR': choices.RATE_TYPE_EUR,
     }
 
+    clear_cache = False
+
     for curr in currencies:
         currencies_type = curr['ccy']
         if currencies_type in available_currencies_types:
@@ -43,6 +46,10 @@ def parse_privatbank():
                     buy=buy,
                     bank=bank,
                 )
+                clear_cache = True
+
+    if clear_cache:
+        cache.delete(consts.CACHE_KEY_LATEST_RATES)
 
 
 @shared_task()

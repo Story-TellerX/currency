@@ -3,11 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import JsonResponse  # HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView, View
+from django.core.cache import cache
 
 from currency.tasks import send_email_background
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
 from currency.forms import RateForm, BankForm, ContactUsForm
+from currency import choices, consts
 
 
 class IndexTemplateView(TemplateView):
@@ -35,6 +37,36 @@ class HelloWorld(TemplateView):
 class RateListView(ListView):
     template_name = 'rate_list.html'
     queryset = Rate.objects.all().select_related('bank')
+
+
+def get_latest_rate():
+    # cache_key = consts.CACHE_KEY_LATEST_RATES
+
+    # if cache_key in cache:
+    #     return cache.get(cache_key)
+
+    if consts.CACHE_KEY_LATEST_RATES in cache:
+        return cache.get(consts.CACHE_KEY_LATEST_RATES)
+
+    object_list = []  # context['object_list'] = []
+
+    for bank in Bank.objects.all():
+        for ct_value, ct_display in choices.RATE_TYPE_CHOICES:  # ct, _ - second means 'is unused'
+            latest_rate = Rate.objects.filter(type_curr=ct_value, bank=bank).order_by('-created').first()
+            if latest_rate is not None:
+                object_list.append(latest_rate)
+
+    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 15)
+    return object_list
+
+
+class LatestRatesView(TemplateView):
+    template_name = 'latest_rates.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = get_latest_rate()
+        return context
 
 
 class RateCreateView(CreateView):

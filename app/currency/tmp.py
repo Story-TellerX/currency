@@ -228,3 +228,77 @@
 #     from currency.models import Rate
 #     rate = Rate.objects.get(id=rate_id)
 #     print(f'Got Rate with id: {rate.id}')
+
+# TODO create custom command to override codename
+# b = Bank.objects.get(name='MonoBank')
+# b.code_name
+# b.code_name = 'monobank'
+# b.save()
+# b = Bank.objects.get(name='Vkurse')
+# b.code_name
+# b.code_name = 'vkurse'
+# b.save()
+# b = Bank.objects.get(name='IBoxBank')
+# b.code_name
+# b.code_name = 'iboxbank'
+# b.save()
+# b = Bank.objects.get(name='GrantBank')
+# b.code_name
+# b.code_name = 'grantbank'
+# b.save()
+# b = Bank.objects.get(name='SkyBank')
+# b.code_name
+# b.code_name = 'skybank'
+# b.save()
+
+# CACHE EXAMPLEs
+from time import sleep
+CACHE = {}
+# CACHE = {
+#     'slow_func': {},
+#     'slow_func2': {},
+# }
+# CACHE2 = {}
+
+
+def slow_func(sleep_time, mult=1):
+
+    cache_key = f'slow_func_{sleep_time}_{mult}'
+
+    # if sleep_time in CACHE:
+    #     return CACHE[sleep_time]
+
+    if cache_key in CACHE:
+        return CACHE[cache_key]
+
+    sleep(sleep_time)
+    result = sleep_time * 2 * mult
+    CACHE[cache_key] = result
+    return result
+
+# def slow_func2(sleep_time):
+#
+#     cache_key = f'slow_func2_{sleep_time}'
+#
+#     # if sleep_time incache_key CACHE2:
+#     #     return CACHE2[sleep_time]
+#     # if sleep_time in CACHE:
+#     #     return CACHE[sleep_time]
+#     if cache_key in CACHE:
+#         return CACHE[cache_key]
+#
+#     sleep(sleep_time)
+#     result = sleep_time * 3
+#     # CACHE2[sleep_time] = result
+#     CACHE[cache_key] = result
+#     return result
+
+# print(slow_func(3, 2))
+# print(slow_func(4, 3))
+# print(slow_func(3, 3))
+# print(slow_func(4, 3))
+# print(slow_func2(3))
+# print(slow_func2(3))
+# print(slow_func2(4))
+# print(slow_func2(4))
+# print(CACHE)

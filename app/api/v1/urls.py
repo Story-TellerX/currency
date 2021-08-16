@@ -1,6 +1,8 @@
 from django.urls import path, re_path
+# from django.views.decorators.cache import cache_page
 from rest_framework import routers
 from api.v1.views import RateViewSets, BankVListView, RateTypeChoicesView, ContactUsViewSets, BankVDetailsView
+# LatestRates
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -31,6 +33,7 @@ router.register(r'contactuss', ContactUsViewSets, basename='contactus')
 # urlpatterns = router.urls
 urlpatterns = [
     path('choices/currency/types/', RateTypeChoicesView.as_view(), name='choices-currency-types'),
+    # path('rates/latest/', (cache_page(60 * 60 * 8))(LatestRates.as_view()), name='rates-latest'),
     path('banks/', BankVListView.as_view(), name='banks'),
     path('banks/details/<int:pk>/', BankVDetailsView.as_view(), name='bank-details'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -56,5 +56,7 @@ class User(AbstractUser):
             self.username = str(uuid.uuid4())
         if self.phone:
             self.phone = ''.join(char for char in self.phone if char.isdigit())
+        if self.email:
+            self.email = str(self.email).lower()
         super().save(*args, **kwargs)
         # print('After save')

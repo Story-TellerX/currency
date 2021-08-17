@@ -1,5 +1,7 @@
 import pytest
 from django.core.management import call_command
+# from django.dispatch import Signal
+# from accounts.models import User
 
 
 @pytest.fixture(autouse=True, scope="function")
@@ -27,12 +29,15 @@ def client_api_auth(django_user_model):
     from rest_framework.test import APIClient
 
     client = APIClient()
-    email = "test12@test.com"
-    password = "first-pass-1"
+    email = "admin@admin.com"
+    password = "admin@admin.com"
+    phone = '847259'
 
-    user = django_user_model.objects.create(email=email, password=password)
+    user = django_user_model.objects.create(email=email, password=password, phone=phone)
     user.set_password(password)
     user.save()
+
+    # Signal.disconnect(self=Signal, receiver=pre_delete, sender=User, dispatch_uid=user.pk)
 
     response = client.post('/api/v1/token/', data={
         'email': email,

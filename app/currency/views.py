@@ -38,7 +38,7 @@ class HelloWorld(TemplateView):
 
 class RateListView(FilterView):  # ListView was used for create list view,now it used filters view
     template_name = 'rate_list.html'
-    queryset = Rate.objects.all().select_related('bank').order_by('id')
+    queryset = Rate.objects.all().select_related('bank').order_by('-id')
     paginate_by = 10
     filterset_class = RateFilter
 

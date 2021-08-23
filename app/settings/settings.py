@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-co5s63^ih&ux_ya^lr(ork#60q@))rw&_^p*%p%=^zgmqeuypz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -75,9 +75,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'currency.middlewares.AnalyticsMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',  # Temporary is unused as cached all pages
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',  # Temporary is unused as cached all pages
+    # 'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'settings.urls'
@@ -149,6 +149,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / '..' / 'static_content' / 'static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / '..' / 'static_content'

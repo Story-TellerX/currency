@@ -34,6 +34,7 @@ Faker==8.4.0
 flake8==3.9.2
 flake8-builtins==1.5.3
 flake8-print==4.0.0
+gunicorn==20.1.0
 idna==2.10
 inflection==0.5.1
 iniconfig==1.1.1
@@ -82,6 +83,7 @@ toml==0.10.2
 traitlets==5.0.5
 uritemplate==3.0.1
 urllib3==1.26.6
+uWSGI==2.0.19.1
 vine==5.0.0
 wcwidth==0.2.5
 xlrd==2.0.1

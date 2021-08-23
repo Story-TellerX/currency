@@ -5,11 +5,13 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView, View
 from django.core.cache import cache
 
+from currency.filters import RateFilter
 from currency.tasks import send_email_background
 from currency.utils import generate_password
 from currency.models import Rate, ContactUs, Bank
 from currency.forms import RateForm, BankForm, ContactUsForm
 from currency import choices, consts
+from django_filters.views import FilterView
 
 
 class IndexTemplateView(TemplateView):
@@ -34,9 +36,11 @@ class HelloWorld(TemplateView):
         return context
 
 
-class RateListView(ListView):
+class RateListView(FilterView):  # ListView was used for create list view,now it used filters view
     template_name = 'rate_list.html'
-    queryset = Rate.objects.all().select_related('bank')
+    queryset = Rate.objects.all().select_related('bank').order_by('-id')
+    paginate_by = 10
+    filterset_class = RateFilter
 
 
 def get_latest_rate():
@@ -56,7 +60,7 @@ def get_latest_rate():
             if latest_rate is not None:
                 object_list.append(latest_rate)
 
-    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 15)
+    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 8)
     return object_list
 
 

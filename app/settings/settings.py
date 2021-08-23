@@ -75,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'currency.middlewares.AnalyticsMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',  # Temporary is unused as cached all pages
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 ]
@@ -220,9 +220,9 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'rates_anon_throttle': '2/min',
     },
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 

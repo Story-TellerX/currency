@@ -1,5 +1,15 @@
 import pytest
 from django.core.management import call_command
+from django.db.models import signals
+
+from accounts.models import User
+from accounts.signals import (
+    user_deleting_is_denied,
+    pre_save_profile_phone,
+    pre_save_profile_email,
+    post_save_user_send_to_cool_service,
+    post_save_user_send_to_awesome_service,
+)
 
 
 @pytest.fixture(autouse=True, scope="function")
@@ -27,12 +37,20 @@ def client_api_auth(django_user_model):
     from rest_framework.test import APIClient
 
     client = APIClient()
-    email = "test12@test.com"
-    password = "first-pass-1"
+    email = "admin@admin.com"
+    password = "admin@admin.com"
+    phone = '847259'
 
-    user = django_user_model.objects.create(email=email, password=password)
+    user = django_user_model.objects.create(email=email, password=password, phone=phone)
     user.set_password(password)
+
+    signals.pre_save.disconnect(pre_save_profile_phone, sender=User)
+    signals.pre_save.disconnect(pre_save_profile_email, sender=User)
+
     user.save()
+
+    signals.post_save.disconnect(post_save_user_send_to_cool_service, sender=User)
+    signals.post_save.disconnect(post_save_user_send_to_awesome_service, sender=User)
 
     response = client.post('/api/v1/token/', data={
         'email': email,
@@ -43,6 +61,8 @@ def client_api_auth(django_user_model):
     client.credentials(HTTP_AUTHORIZATION='JWT ' + response.json()['access'])
 
     yield client
+
+    signals.pre_delete.disconnect(user_deleting_is_denied, sender=User)
 
     user.delete()
 

@@ -5,6 +5,9 @@ manage_py := python3 ./app/manage.py
 runserver:
 	$(manage_py) runserver
 
+build:
+	docker-compose down && docker-compose up -d
+
 makemigrations:
 	$(manage_py) makemigrations
 

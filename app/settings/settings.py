@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -16,20 +17,20 @@ from pathlib import Path
 from celery.schedules import crontab
 from django.urls import reverse_lazy
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from dotenv import load_dotenv
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-co5s63^ih&ux_ya^lr(ork#60q@))rw&_^p*%p%=^zgmqeuypz'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG') == 'true'
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(';')
 
 # Application definition
 
@@ -61,7 +62,8 @@ INSTALLED_APPS = [
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
+        # 'LOCATION': '127.0.0.1:11211',  # first simple direct connection
+        'LOCATION': f'{os.getenv("MEMCACHED_HOST", "localhost")}:{os.getenv("MEMCACHED_PORT", "11211")}',
     }
 }
 
@@ -100,17 +102,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'settings.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# This DB was used as default for first development attempt
+
+
+# print(f'ENV: {os.getenv("ENV")}')  # getting value from vsr ENV from system noqa
+
+# ENV = os.getenv('ENV', 'prod')
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': BASE_DIR / f'db-{ENV}.sqlite3',  # example of using env var for differs DB launch as param
+#     }
+# }
+
+
+load_dotenv()  # take environment variables from .env.
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ["POSTGRES_DB"],
+        'USER': os.environ["POSTGRES_USER"],
+        'PASSWORD': os.environ["POSTGRES_PASSWORD"],
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -130,7 +150,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -143,7 +162,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -159,12 +177,18 @@ MEDIA_ROOT = BASE_DIR / '..' / 'static_content' / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-CELERY_BROKER_URL = 'amqp://localhost'  # Connect broker
+# CELERY_BROKER_URL = 'amqp://localhost'  # Connect broker - simple direct connection
+
+CELERY_BROKER_URL = 'amqp://{0}:{1}@{2}:{3}//'.format(
+    os.environ['RABBITMQ_DEFAULT_USER'],
+    os.environ['RABBITMQ_DEFAULT_PASS'],
+    os.getenv('RABBITMQ_DEFAULT_HOST', '127.0.0.1'),
+    os.getenv('RABBITMQ_DEFAULT_PORT', '5672'),
+)
 
 CELERY_BEAT_SCHEDULE = {
     'print_hello_world': {
@@ -288,4 +312,4 @@ SWAGGER_SETTINGS = {
 try:
     from settings.settings_local import *  # noqa
 except ImportError:
-    print('No local settings were found!\n'*5)  # noqa
+    print('No local settings were found!\n' * 5)  # noqa

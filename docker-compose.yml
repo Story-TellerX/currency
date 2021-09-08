@@ -20,6 +20,14 @@ services:
     env_file:
       - .env
 
+  flower:
+    image: "backend-local"
+    command: celery flower -A tasks
+    build: .
+    container_name: flower
+    stdin_open: true
+    tty: true
+
   celerybeat:
     image: "backend-local"
     command: celery -A settings beat -l info --schedule=/tmp/celerybeat-schedule --pidfile=/tmp/celerybeat.pid
@@ -49,3 +57,14 @@ services:
       #- "8080:8080"  # windows specific!!!
       - "80:80"
       - "443:443"
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: "portainer"
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer_data:/home/stx/data"
+    ports:
+      - "8080:8080"
+      - "9000:9000"

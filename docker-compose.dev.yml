@@ -9,6 +9,10 @@ services:
       - "8000:8000"
       - "8001:8001"
 
+  flower:
+    ports:
+      - "5555:5555"
+
   memcached:
     ports:
       - "11211:11211"
@@ -28,6 +32,16 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:5.6
+    env_file:
+      - .env
+    ports:
+      - "5050:5050"
+
 volumes:
   db_data: {}
+  portainer_data:
+    external: true
 

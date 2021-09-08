@@ -10,6 +10,26 @@ services:
     env_file:
       - .env
 
+  celery:
+    image: "backend-local"
+    command: celery -A settings worker -l info --pidfile=/tmp/celery.pid
+    build: .
+    container_name: celery
+    stdin_open: true
+    tty: true
+    env_file:
+      - .env
+
+  celerybeat:
+    image: "backend-local"
+    command: celery -A settings beat -l info --schedule=/tmp/celerybeat-schedule --pidfile=/tmp/celerybeat.pid
+    build: .
+    container_name: celerybeat
+    stdin_open: true
+    tty: true
+    env_file:
+      - .env
+
   memcached:
     image: memcached
     container_name: memcached
@@ -19,3 +39,13 @@ services:
     container_name: rabbitmq
     env_file:
       - .env
+
+  nginx:
+    image: nginx:1.19
+    container_name: "nginx"
+    volumes:
+      - "./default.conf:/etc/nginx/conf.d/default.conf"
+    ports:
+      #- "8080:8080"  # windows specific!!!
+      - "80:80"
+      - "443:443"

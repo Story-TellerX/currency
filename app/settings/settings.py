@@ -17,7 +17,8 @@ from pathlib import Path
 from celery.schedules import crontab
 from django.urls import reverse_lazy
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
+# load_dotenv()  # take environment variables from .env.
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -118,8 +119,6 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 #     }
 # }
 
-
-load_dotenv()  # take environment variables from .env.
 
 DATABASES = {
     'default': {

@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-manage_py := python3 ./app/manage.py
+manage_py := docker exec -it backend python3 ./app/manage.py
 
 runserver:
 	$(manage_py) runserver

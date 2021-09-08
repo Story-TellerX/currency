@@ -1,0 +1,32 @@
+version: "3.3"
+
+services:
+  backend:
+    command: python app/manage.py runserver 0:8000
+    volumes:
+      - "./:/home/build"
+    ports:
+      - "8000:8000"
+
+  memcached:
+    ports:
+      - "11211:11211"
+
+  rabbitmq:
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  postgres:
+    image: postgres:13.4-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data: {}
+

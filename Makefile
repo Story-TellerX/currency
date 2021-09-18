@@ -1,12 +1,20 @@
 SHELL := /bin/bash
 
-manage_py := python3 ./app/manage.py
+manage_py := docker exec -it backend python3 ./app/manage.py
 
 runserver:
-	$(manage_py) runserver
+	$(manage_py) runserver 0:8001
 
 build:
-	docker-compose down && docker-compose up -d
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+
+down:
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+
+collectstatic:
+	$(manage_py) collectstatic --noinput && \
+	docker cp backend:/tmp/static_content/static ~/tmp/static_content && \
+	docker cp ~/tmp/static_content nginx:/var
 
 makemigrations:
 	$(manage_py) makemigrations
